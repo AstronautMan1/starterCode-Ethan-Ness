@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(OpenGL_FCG
+project(cs4212StarterCode
   VERSION 1.0
   LANGUAGES CXX)
 
@@ -82,10 +82,13 @@ find_package(glm CONFIG REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)
 
 # not using Vulkan at the moment
-# find_package(Vulkan OPTIONAL)
+# find_package(Vulkan)
 
 # Add the src directory to build the library.
 add_subdirectory(src)
+
+# Add my renderlib
+# add_subdirectory(renderlib)
 
 # Some examples
 add_subdirectory(examples)
