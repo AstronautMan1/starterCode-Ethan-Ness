@@ -94,7 +94,7 @@ add_subdirectory(examples)
 # Renderer code
 #
 # Create your rendering library here....
-
+#add_subdirectory(renderlib)
 
 #
 # OpenGL Example
