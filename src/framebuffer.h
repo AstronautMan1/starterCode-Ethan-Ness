@@ -16,7 +16,7 @@ class Framebuffer {
 
         void clearToColor(vec3 c);
 
-        void setPixelColor(int i, int j);
+        void setPixelColor(int i, int j, vec3 c);
 
         void exportToPNG(std::string filename);
 

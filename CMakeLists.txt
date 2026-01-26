@@ -88,7 +88,9 @@ find_package(glfw3 CONFIG REQUIRED)
 add_subdirectory(src)
 
 # Add my renderlib
-# add_subdirectory(renderlib)
+add_subdirectory(renderlib)
+
+include_directories(${CMAKE_SOURCE_DIR}/renderlib)
 
 # Some examples
 add_subdirectory(examples)

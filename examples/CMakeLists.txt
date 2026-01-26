@@ -22,4 +22,11 @@ target_link_libraries(test_readPNGFile ${Boost_PROGRAM_OPTIONS_LIBRARIES})
 target_link_libraries(test_readPNGFile PNG::PNG)
 target_link_libraries(test_readPNGFile ZLIB::ZLIB)
 
+add_executable(test_framebuffer
+  test_framebuffer.cpp
+)
+target_link_libraries(test_framebuffer cs4212-util)
+target_link_libraries(test_framebuffer PNG::PNG)
+target_link_libraries(test_framebuffer ZLIB::ZLIB)
+
 
