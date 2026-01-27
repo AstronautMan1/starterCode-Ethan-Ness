@@ -47,6 +47,23 @@ void blueWithWhiteSmile(){
 
 }
 
+void USFlag() {
+
+    Framebuffer fb(600,600);
+    vec3 Red(1.0f,0.0f,0.0f);
+    fb.clearToColor(Red);
+
+    for(int x = 0; x <= 200; ++x){
+        for(int y = 0; y <= 200; ++y){
+            fb.setPixelColor(x,y,vec3(0.0f,0.0f,1.0f));
+
+        }
+    }
+
+    fb.exportToPNG("test_USFlag.png");
+    std::cout << "US Flag Output" << std::endl;
+}
+
 int main() {
 
     redWithCenterGreen();
