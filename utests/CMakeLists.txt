@@ -20,9 +20,8 @@ include(Catch)
 # compile into an executable.
 # 
 set(UTESTS 
-  utest_Success
-  utest_Failure
-  utest_vec3)
+  utest_vec3
+  utest_Ray)
 
 # 
 # For each of the executables named in ${UTESTS}, compile them into a
@@ -33,10 +32,9 @@ foreach(uexec ${UTESTS})
   target_link_libraries(${uexec}
 	PRIVATE
 	Catch2::Catch2WithMain
-	cs4212-util
-  )
+	cs4212-util)
 
-  # add_test(NAME ${uexec} COMMAND $<TARGET_FILE:${uexec}>)
   catch_discover_tests(${uexec})
 endforeach(uexec)
+
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vec3.h"
+#include "ray.h"
 
 class Camera {
 
@@ -9,6 +10,8 @@ class Camera {
         Camera() : pos(0,0,0), U(1,0,0), V(0,1,0), W(0,0,1), focalLength(1.0), imagePlane_Length(0.25), imagePlane_Width(0.25) {}
 
         virtual ~Camera() {}
+
+        virtual void generateRay(int i, int j, ray &r) = 0;
 
 
     private:
