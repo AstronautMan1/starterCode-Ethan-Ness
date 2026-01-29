@@ -29,4 +29,11 @@ target_link_libraries(test_framebuffer cs4212-util)
 target_link_libraries(test_framebuffer PNG::PNG)
 target_link_libraries(test_framebuffer ZLIB::ZLIB)
 
+add_executable(test_rayTracer
+  test_rayTracer.cpp
+)
+target_link_libraries(test_rayTracer cs4212-util)
+target_link_libraries(test_rayTracer PNG::PNG)
+target_link_libraries(test_rayTracer ZLIB::ZLIB)
+
 

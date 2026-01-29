@@ -22,6 +22,16 @@ void Framebuffer::Setwidth(int w){
     width = w;
 }
 
+int Framebuffer::getHeight(){
+
+    return height;
+}
+
+int Framebuffer::getWidth(){
+
+    return width;
+}
+
 void Framebuffer::clearToColor(vec3 c){
 
     std::fill(fbstorage.begin(), fbstorage.end(), c);

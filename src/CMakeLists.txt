@@ -3,6 +3,9 @@ add_library (cs4212-util
   handleGraphicsArgs.cpp handleGraphicsArgs.h
   model_obj.cpp model_obj.h
   framebuffer.h framebuffer.cpp
+  camera.h ray.h
+  PerspectiveCamera.h PerspectiveCamera.cpp
+  
 )
 
 

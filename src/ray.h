@@ -21,7 +21,6 @@ class ray {
 
         void setDirection(vec3 newDirection) {dir = newDirection;}
 
-
     private:
 
         point3 orig;

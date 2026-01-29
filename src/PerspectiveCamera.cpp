@@ -1,13 +1,15 @@
 #include "PerspectiveCamera.h"
 
-void PerspectiveCamera::generateRay (int i, int j, ray &r){
+void PerspectiveCamera::generateRay (int i, int j, ray &R){
 
-    float u, v;
+    R.setOrigin(pos);
 
-    u = l + (r- l) *  (i + 0.5) / (float)nx;
-    v = b + (t - b) * (j + 0.5) / (float)ny;
+    
+    float u = l + (r - l) * (i + 0.5f) / (float)nx;
 
+    float v = t + (b - t) * (j + 0.5f) / (float)ny;
 
-    r.setDirection(-W * focalLength + U*u + V*v);
+    vec3 direction = -W * focalLength + u * U + v * V;
 
+    R.setDirection(direction);
 }

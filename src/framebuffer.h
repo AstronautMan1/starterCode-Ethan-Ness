@@ -14,6 +14,10 @@ class Framebuffer {
 
         void Setheight(int x);
 
+        int getWidth();
+
+        int getHeight();
+
         void clearToColor(vec3 c);
 
         void setPixelColor(int i, int j, vec3 c);
