@@ -53,8 +53,8 @@ void USFlag() {
     vec3 Red(1.0f,0.0f,0.0f);
     fb.clearToColor(Red);
 
-    for(int x = 0; x <= 200; ++x){
-        for(int y = 0; y <= 200; ++y){
+    for(int x = 0; x <= 300; ++x){
+        for(int y = 0; y <= 300; ++y){
             fb.setPixelColor(x,y,vec3(0.0f,0.0f,1.0f));
 
         }
@@ -68,5 +68,6 @@ int main() {
 
     redWithCenterGreen();
     blueWithWhiteSmile();
+    USFlag();
     return 0;
 }

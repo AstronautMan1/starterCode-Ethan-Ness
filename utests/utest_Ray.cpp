@@ -69,9 +69,3 @@ TEST_CASE("Ray testing at function"){
     REQUIRE(test4Result.z() == madeRay.at(test4).z());
 
 }
-
-TEST_CASE("Ray Testing of floating point tolerance") {
-
-
-    
-}
