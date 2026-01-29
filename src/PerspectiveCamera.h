@@ -10,10 +10,10 @@ class PerspectiveCamera : public Camera {
 
         PerspectiveCamera(vec3 position, vec3 valueU, vec3 valueV, vec3 valueW, float focal, float planeWidth, float planeLength, int imageWidth, int imageHeight) 
         : pos(position), U(valueU), V(valueV), W(valueW), focalLength(focal), imagePlane_Width(planeWidth), imagePlane_Length(planeLength), nx(imageWidth), ny(imageHeight) {
-            l = -planeWidth / 2.0f;
-            r = planeWidth / 2.0f;
-            b = -planeLength / 2.0f;
-            t = planeLength / 2.0f;
+            leftBound = -planeWidth / 2.0f;
+            rightBound = planeWidth / 2.0f;
+            bottomBound = -planeLength / 2.0f;
+            topBound = planeLength / 2.0f;
         }
 
         void generateRay(int i, int j, ray &r) override;
@@ -36,8 +36,8 @@ class PerspectiveCamera : public Camera {
         float imagePlane_Length;
 
         int nx;  
-        
+
         int ny;  
 
-        float l, r, b, t;  // Image plane boundaries: left, right, bottom, top
+        float leftBound, rightBound, bottomBound, topBound;  
 };
