@@ -1,8 +1,18 @@
-#include "framebuffer.h"
-#include <iostream>
+/*
+    @author Ethan Ness
+
+    This is the framebuffer tester which tests the framebuffer class by just creating some basic images
+
+*/
 
 
+/*
+    Includes Section
+*/
+#include "framebuffer.h" // framebuffer class
+#include <iostream> // iostream library
 
+/// @brief This just creates a red image with the center pixel being green
 void redWithCenterGreen(){
     Framebuffer fb(100, 100);
     vec3 red(1.0f, 0.0f, 0.0f);
@@ -12,7 +22,7 @@ void redWithCenterGreen(){
     std::cout << "Framebuffer exported to test_framebuffer.png" << std::endl;
 }
 
-
+/// @brief This makes an image with a blue background and a white smiley face
 void blueWithWhiteSmile(){
 
     Framebuffer fb(100,100);
@@ -47,6 +57,7 @@ void blueWithWhiteSmile(){
 
 }
 
+/// @brief This does a mock US flag image
 void USFlag() {
 
     Framebuffer fb(600,600);
@@ -64,6 +75,8 @@ void USFlag() {
     std::cout << "US Flag Output" << std::endl;
 }
 
+/// @brief Calls the image functions to make images
+/// @return standard 0 return
 int main() {
 
     redWithCenterGreen();

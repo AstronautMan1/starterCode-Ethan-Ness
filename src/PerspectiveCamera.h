@@ -1,7 +1,17 @@
+/*
+    @author Ethan Ness
+
+    The perspective camera which implements the camera interface for a specific perspective camera
+*/
+
 #pragma once
 
-#include "camera.h"
+/*
+    includes section
+*/
+#include "camera.h" // camera interface
 
+/// @brief Perspective camera which inherits the public section of the camera interface
 class PerspectiveCamera : public Camera {
 
     public:
@@ -25,19 +35,19 @@ class PerspectiveCamera : public Camera {
 
     private:
 
-        vec3 pos;
+        vec3 pos; // position of camera
 
-        vec3 U,V,W;
+        vec3 U,V,W; // direction camera is looking U is x axis, V is y axis, and W is the z axis
 
-        float focalLength;
+        float focalLength; // focal length is the field of view
 
-        float imagePlane_Width;
+        float imagePlane_Width; // width of the image plane
 
-        float imagePlane_Length;
+        float imagePlane_Length; // length of the image plane
 
-        int nx;  
+        int nx;  // x size of the image
 
-        int ny;  
+        int ny;  // y size of the image
 
-        float leftBound, rightBound, bottomBound, topBound;  
+        float leftBound, rightBound, bottomBound, topBound;  // the left, right, top, and bottom bound of the frame buffer
 };

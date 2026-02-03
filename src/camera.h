@@ -1,8 +1,20 @@
+/*
+    @author Ethan Ness
+
+    This is the camera interface which is for different camera types it uses the vec3 and ray class for handling rays and vec3 for camera
+    positioning
+*/
+
 #pragma once
 
-#include "vec3.h"
-#include "ray.h"
+/*
+    includes section
+*/
+#include "vec3.h" // vec3 class
+#include "ray.h" // ray class
 
+/// @brief Camera class that is an interface which has two constructors and a default deconstructor and a generateRay function to 
+///        make rays which is a pure virtual function to be implemented in other camera types.
 class Camera {
 
     public:
@@ -19,14 +31,14 @@ class Camera {
 
     private:
 
-        vec3 pos;
+        vec3 pos; // the position of the camera
 
-        vec3 U, V, W;
+        vec3 U, V, W; // the direction the camera is looking u is x axis, v is y axis, and w is z axis
 
-        int nx, ny;
+        int nx, ny; // the size of the image with nx being x number of pixels and ny being y number of pixels
 
-        float focalLength;
+        float focalLength; // focal length which is like the field of view of the camera
 
-        float imagePlane_Width, imagePlane_Length;
+        float imagePlane_Width, imagePlane_Length; // the width and length of the image plane
 
 };

@@ -1,9 +1,19 @@
-#include <catch2/catch_test_macros.hpp>
-#include <catch2/matchers/catch_matchers_floating_point.hpp>
+/*
+    @author Ethan Ness
 
-#include "ray.h"
-#include "vec3.h"
+    This is a unit test for the ray class to test the basic functionality of the ray class
+*/
 
+
+/*
+    includes section
+*/
+#include <catch2/catch_test_macros.hpp> // catch 2 unit rquirements
+#include <catch2/matchers/catch_matchers_floating_point.hpp> // catch 2 unit rquirements
+#include "ray.h" // ray class
+#include "vec3.h" // vec3 class
+
+// This is a test of the constructor and getters
 TEST_CASE("Ray Constructor and origin/direction return"){
 
     vec3 origin(0,0,0);
@@ -28,6 +38,7 @@ TEST_CASE("Ray Constructor and origin/direction return"){
 
 }
 
+// testing of the at function in ray class
 TEST_CASE("Ray testing at function"){
 
     vec3 origin(1,1,1);

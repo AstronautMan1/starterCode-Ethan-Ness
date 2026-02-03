@@ -1,9 +1,23 @@
-#ifndef VEC3_H
-#define VEC3_H
+/*
+    @author Ethan Ness
+    @author Peter Shirley
+    @author Trevor David Black
+    @author Steve Hollasch
 
-#include <cmath>
-#include <iostream>
+    This is a vec3 class taken from the class textbook "Ray Tracing In One Weekend" I have made some minor modifications mostly changing
+    the data types from int to float to work with the png file format of coloring
+*/
 
+#pragma once
+
+/*
+    Includes section
+*/
+#include <cmath> // cmath library
+#include <iostream> // iostream library
+
+/// @brief This is the vec3 class which handles things like postioning of cameras, rays, and even color values
+///        This class also handles vector methods like * , / , + , - , dot , and cross. It also has methods for unit vectoring
 class vec3{
 
     public:
@@ -96,5 +110,3 @@ inline vec3 cross(const vec3& u, const vec3& v) {
 inline vec3 unit_vector(const vec3& v) {
     return v / v.length();
 }
-
-#endif

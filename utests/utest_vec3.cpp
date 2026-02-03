@@ -1,7 +1,15 @@
-#include <catch2/catch_test_macros.hpp>
-#include <catch2/matchers/catch_matchers_floating_point.hpp>
+/*
+    @author Ethan Ness
 
-#include "vec3.h"
+    This is a unit test for the vec3 class to do some basic testing on its functionality
+*/
+
+/*
+    included section
+*/
+#include <catch2/catch_test_macros.hpp> // catch 2 unit rquirements
+#include <catch2/matchers/catch_matchers_floating_point.hpp> // catch 2 unit rquirements
+#include "vec3.h" // vec 3 class
 
 // This is just a base test used to test the initial creation of vec 3 unit testing
 TEST_CASE("VEC 3 TEST"){

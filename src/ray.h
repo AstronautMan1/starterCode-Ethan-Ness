@@ -1,7 +1,17 @@
+/*
+    @author Ethan Ness
+
+    This is the ray class which handles the making of rays
+*/
+
 #pragma once
 
-#include "vec3.h"
+/*
+    include section
+*/
+#include "vec3.h" // vec3 class
 
+/// @brief This is the ray class which handles the making of rays with an origin and a direction
 class ray {
 
     public:
@@ -23,8 +33,8 @@ class ray {
 
     private:
 
-        point3 orig;
+        point3 orig; // origin of the ray
 
-        vec3 dir;
+        vec3 dir; // direction of the ray
 
 };
