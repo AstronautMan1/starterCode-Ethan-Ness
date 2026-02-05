@@ -5,7 +5,8 @@ add_library (cs4212-util
   framebuffer.h framebuffer.cpp
   camera.h ray.h
   PerspectiveCamera.h PerspectiveCamera.cpp
-  
+  shape.h
+  Sphere.h Sphere.cpp
 )
 
 

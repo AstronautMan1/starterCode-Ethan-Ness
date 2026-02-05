@@ -36,4 +36,10 @@ target_link_libraries(test_rayTracer cs4212-util)
 target_link_libraries(test_rayTracer PNG::PNG)
 target_link_libraries(test_rayTracer ZLIB::ZLIB)
 
+add_executable(test_sphereImage
+  test_sphereImage.cpp
+)
+target_link_libraries(test_sphereImage cs4212-util)
+target_link_libraries(test_sphereImage PNG::PNG)
+target_link_libraries(test_sphereImage ZLIB::ZLIB)
 
