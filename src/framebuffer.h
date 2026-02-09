@@ -24,7 +24,7 @@ class Framebuffer {
 
         void Setwidth(int x);
 
-        void Setheight(int x);
+        void Setheight(int y);
 
         int getWidth();
 

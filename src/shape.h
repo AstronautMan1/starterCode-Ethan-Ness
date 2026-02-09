@@ -19,7 +19,7 @@ class Shape{
 
         virtual ~Shape() {} // basic deconstructor
 
-        virtual bool intersect(const ray& r) = 0; // pure virtual intersect function
+        virtual bool intersect(const ray& r, float tmin, float &tmax) = 0; // pure virtual intersect function
 
     private:
 

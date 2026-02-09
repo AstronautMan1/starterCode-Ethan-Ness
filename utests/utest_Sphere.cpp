@@ -36,12 +36,15 @@ TEST_CASE("Intersect test") {
 
     ray r1(point3(0,0,0), point3(1,1,1));
 
-    REQUIRE(s1.intersect(r1) == true);
+    float tmin = 0.001f;
+    float tmax = std::numeric_limits<float>::infinity();
+
+    REQUIRE(s1.intersect(r1, tmin, tmax) == true);
 
     Sphere s2(point3(20,20,0), 1.0f);
 
     ray r2(point3(0,0,0), point3(1,1,1));
 
-    REQUIRE(s2.intersect(r2) == false);
+    REQUIRE(s2.intersect(r2, tmin, tmax) == false);
 
 }

@@ -1,25 +1,25 @@
 /*
     @author Ethan Ness
 
-    test file to test the making of spheres in an image space
-*/
+    Triangle image tester
 
+*/
 
 /*
     Includes Section
 */
-#include "framebuffer.h" // Framebuffer class
-#include "ray.h" // Ray Class
-#include "vec3.h" // Vec3 Class
-#include "camera.h" // Camera Class
-#include "PerspectiveCamera.h" // Perspective Camera
-#include "Shape.h" // shape class
-#include "Sphere.h" // sphere class
+#include "framebuffer.h" // framebuffer class
+#include "ray.h" // ray class
+#include "vec3.h" // vec3 class
+#include "camera.h" // camera class
+#include "PerspectiveCamera.h" // perspective camera class
+#include "shape.h" // shape class
+#include "triangle.h" // triangle class
 #include <iostream> // iostream library
 
 
-/// @brief This is the function that handles the making of a framebuffer and making a camera and a sphere than creating the image into a png
-void sphereimage(){
+/// @brief This handles the making of a triangle image
+void triangleImage(){
 
     Framebuffer fb(500,500); // framebuffer creation
     float aspectRatio = static_cast<float>(fb.getWidth()) / static_cast<float>(fb.getHeight()); // set up aspect ratio calculation
@@ -28,16 +28,15 @@ void sphereimage(){
     vec3 U(1,0,0); // x axis direction camera is looking
     vec3 V(0,1,0); // y axis direction camera is looking
     vec3 W(0,0,1); // z axis direction camera is looking
-    float focal = 0.1f; // focal size
+    float focal = 0.05f; // focal size
     float planeHeight = 0.5f; // plane height
     float planeWidth = planeHeight * aspectRatio; // plane width
     float tmin = 0.001f; // initialize tmin
 
     PerspectiveCamera pc(position, U, V, W, focal, planeWidth, planeHeight, fb.getWidth(), fb.getHeight()); // making the perspective camera
 
-    std::shared_ptr<Shape> s = std::make_shared<Sphere>(point3(0,0,-2.0f), 0.6f); // shared pointer of the sphere with a center location of 0,0,-2 and a radius of 0.6
+    std::shared_ptr<Shape> s = std::make_shared<Triangle>(vec3(2.0,4.0,-2.0), vec3(4.0,2.0,-2.0), vec3(0.0,2.0,-2.0)); // shared pointer of the triangle
 
-    // for loop to go through the whole framebuffer
     for (int x = 0; x < fb.getWidth(); ++x){
         for(int y = 0; y < fb.getHeight(); ++y){
 
@@ -47,24 +46,23 @@ void sphereimage(){
             pc.generateRay(x, y, r); // generate the ray
 
             if(s->intersect(r, tmin, tmax)){
-                fb.setPixelColor(x,y, vec3(1.0,0,0)); // if ray intersects the sphere paint red
+                fb.setPixelColor(x,y, vec3(1.0,0,0)); // if ray intersects the triangle paint red
             }
             else{
-                fb.setPixelColor(x,y,vec3(0,0,1.0)); // if ray doesn't intersect the sphere paint blue
+                fb.setPixelColor(x,y,vec3(0,0,1.0)); // if ray doesn't intersect the triangle paint blue
             }
         }
     }
 
-    fb.exportToPNG("test_sphereimage.png"); // export to a png file
+    fb.exportToPNG("test_triangleimage.png"); // export to a png file
 
 }
 
-
-/// @brief the main function to run the sphere image function
-/// @return just returns 0
+/// @brief This is the main that calls the triangle image generator
+/// @return just returns 0 when finished
 int main(){
 
-    sphereimage();
+    triangleImage();
 
     return 0;
 

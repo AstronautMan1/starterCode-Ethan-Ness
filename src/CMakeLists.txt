@@ -7,6 +7,8 @@ add_library (cs4212-util
   PerspectiveCamera.h PerspectiveCamera.cpp
   shape.h
   Sphere.h Sphere.cpp
+  triangle.h triangle.cpp
+  hitList.h hitList.cpp
 )
 
 

@@ -43,3 +43,23 @@ target_link_libraries(test_sphereImage cs4212-util)
 target_link_libraries(test_sphereImage PNG::PNG)
 target_link_libraries(test_sphereImage ZLIB::ZLIB)
 
+add_executable(test_triangleImage
+  test_triangleImage.cpp
+)
+target_link_libraries(test_triangleImage cs4212-util)
+target_link_libraries(test_triangleImage PNG::PNG)
+target_link_libraries(test_triangleImage ZLIB::ZLIB)
+
+add_executable(test_multipleShapesImage
+  test_multipleShapes.cpp
+)
+target_link_libraries(test_multipleShapesImage cs4212-util)
+target_link_libraries(test_multipleShapesImage PNG::PNG)
+target_link_libraries(test_multipleShapesImage ZLIB::ZLIB)
+
+add_executable(test_multipleTriangleImage
+  test_multipleTriangles.cpp
+)
+target_link_libraries(test_multipleTriangleImage cs4212-util)
+target_link_libraries(test_multipleTriangleImage PNG::PNG)
+target_link_libraries(test_multipleTriangleImage ZLIB::ZLIB)
