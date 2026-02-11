@@ -2,13 +2,8 @@
 
     @author Ethan Ness
 
-    This is the rayTracer.cpp which is a tester for the ray tracer that is implemented inside it has its own function directionToColor
-    which takes in a vec3 direction reference and takes a normalized version (scopeing to -1 - 1) then we do the color of the ray
-    calculation which takes the normalized and adds 1 to each and then divides by 2 to give a 0 - 1 scope then it is returned.
-
-    Then there is the rayTester function which actually tests the ray tracer with different parameters and exports the image as a png
-
-    then a main function which calls the rayTester function and then returns 0
+    This is the encoder.cpp which is a tester the encoding of messages in a LSB context for a form of steganography. The most of it is the same as the rayTracer tester.
+    however it adds the elements needed for steganography adding.
 
 */
 
@@ -38,8 +33,10 @@ vec3 directionToColor(const vec3 &direction){
 
 }
 
-/// @brief Ray Tester is the actual tester of the ray tracer
-void rayTester(const std::string &secretFile, const std::string &outputFile){
+/// @brief 
+/// @param secretFile 
+/// @param outputFile 
+void steg_tester(const std::string &secretFile, const std::string &outputFile){
 
     Framebuffer fb(400,400); // size of the framebuffer screen
 
@@ -67,28 +64,30 @@ void rayTester(const std::string &secretFile, const std::string &outputFile){
         }
     }
 
-    std::cout << "Embedding the following file: " << secretFile << std::endl;
-    fb.encodeMessage(secretFile);
+    std::cout << "Embedding the following file: " << secretFile << std::endl; 
+    fb.encodeMessage(secretFile); // we encode our message with the file to be used as payload passed in
 
 
     std::cout << "Exporting Stegonagraphy image to: " << outputFile << std::endl;
-    fb.exportToPNG(outputFile);
+    fb.exportToPNG(outputFile); // We export the image as a png with the name of the png being the name received in
 
 }
 
-/// @brief Main function that just runs the rayTester function
-/// @return standard 0 return
+/// @brief main function which runs the steg_tester function for steganography
+/// @param argc the count of the number of arguments passed
+/// @param argv the vector of the arguments passed in
+/// @return we return 1 if less then 3 args return 0 otherwise
 int main(int argc, char* argv[]){
 
-    if (argc < 3){
+    if (argc < 3){ // if less then 3 arguments passed in we throw errors
         std::cout << "Usage: ./test_encoder <file_to_hide> <output_png_name>" << std::endl;
         std::cout << "Example: ./test_encoder secret.zip encoded_image.png" << std::endl;
         return 1;
     }
 
-    std::string secret = argv[1];
-    std::string output = argv[2];
+    std::string secret = argv[1]; // our secret file to use as payload is the first argument
+    std::string output = argv[2]; // the output file name is the second argument
 
-    rayTester(secret, output);
+    steg_tester(secret, output); // call steg_tester passing in the secret file and output file
     return 0;
 }
