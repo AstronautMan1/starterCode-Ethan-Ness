@@ -36,6 +36,12 @@ class Framebuffer {
 
         void exportToPNG(std::string filename);
 
+        void encodeMessage(const std::string &message);
+
+        void decodeMessage(const std::string &output);
+
+        void loadFromPNG(std::string filename);
+
     private:
 
         std::vector<vec3> fbstorage; // storage of the framebuffer

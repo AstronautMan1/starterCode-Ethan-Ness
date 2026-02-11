@@ -39,7 +39,7 @@ vec3 directionToColor(const vec3 &direction){
 }
 
 /// @brief Ray Tester is the actual tester of the ray tracer
-void rayTester(){
+void rayTester(const std::string &secretFile, const std::string &outputFile){
 
     Framebuffer fb(400,400); // size of the framebuffer screen
 
@@ -67,14 +67,28 @@ void rayTester(){
         }
     }
 
-    fb.exportToPNG("raytracetester.png"); // export to a png
+    std::cout << "Embedding the following file: " << secretFile << std::endl;
+    fb.encodeMessage(secretFile);
+
+
+    std::cout << "Exporting Stegonagraphy image to: " << outputFile << std::endl;
+    fb.exportToPNG(outputFile);
 
 }
 
 /// @brief Main function that just runs the rayTester function
 /// @return standard 0 return
-int main(){
+int main(int argc, char* argv[]){
 
-    rayTester();
+    if (argc < 3){
+        std::cout << "Usage: ./test_encoder <file_to_hide> <output_png_name>" << std::endl;
+        std::cout << "Example: ./test_encoder secret.zip encoded_image.png" << std::endl;
+        return 1;
+    }
+
+    std::string secret = argv[1];
+    std::string output = argv[2];
+
+    rayTester(secret, output);
     return 0;
 }

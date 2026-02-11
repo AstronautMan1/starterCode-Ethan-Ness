@@ -63,3 +63,17 @@ add_executable(test_multipleTriangleImage
 target_link_libraries(test_multipleTriangleImage cs4212-util)
 target_link_libraries(test_multipleTriangleImage PNG::PNG)
 target_link_libraries(test_multipleTriangleImage ZLIB::ZLIB)
+
+add_executable(test_encoder
+  test_encoder.cpp
+)
+target_link_libraries(test_encoder cs4212-util)
+target_link_libraries(test_encoder PNG::PNG)
+target_link_libraries(test_encoder ZLIB::ZLIB)
+
+add_executable(test_decoder
+  test_decoder.cpp
+)
+target_link_libraries(test_decoder cs4212-util)
+target_link_libraries(test_decoder PNG::PNG)
+target_link_libraries(test_decoder ZLIB::ZLIB)
