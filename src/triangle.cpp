@@ -17,7 +17,7 @@
 /// @param tmin The tmin 
 /// @param tmax The tmax
 /// @return we return a boolean true or false in there was an intersection
-bool Triangle::intersect(const ray &r, float tmin, float &tmax){
+bool Triangle::intersect(const ray &r, float tmin, float &tmax, hit_record &rec){
 
     // all the a through l calculations 
     double a = vertex_a[0] - vertex_b[0];
@@ -60,6 +60,17 @@ bool Triangle::intersect(const ray &r, float tmin, float &tmax){
 
     if (t >= tmin && t <= tmax) { // if t is greater then or equal to tmin and t is less than or equal to tmax set t as the new tmax and return true
         tmax = (float)t;
+
+        rec.setT((double)t);
+        rec.setPoint(r.at(rec.getT()));
+
+        vec3 edge1 = vertex_b - vertex_a;
+        vec3 edge2 = vertex_c - vertex_a;
+
+        vec3 outward_normal = unit_vector(cross(edge1,edge2));
+
+        rec.set_face_normal(r, outward_normal);
+        
         return true;
     }
 

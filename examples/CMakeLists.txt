@@ -63,3 +63,17 @@ add_executable(test_multipleTriangleImage
 target_link_libraries(test_multipleTriangleImage cs4212-util)
 target_link_libraries(test_multipleTriangleImage PNG::PNG)
 target_link_libraries(test_multipleTriangleImage ZLIB::ZLIB)
+
+add_executable(test_LambertianImage
+  test_LambertianTest.cpp
+)
+target_link_libraries(test_LambertianImage cs4212-util)
+target_link_libraries(test_LambertianImage PNG::PNG)
+target_link_libraries(test_LambertianImage ZLIB::ZLIB)
+
+add_executable(test_BlinnPhongImage
+  test_BlinnPhongTest.cpp
+)
+target_link_libraries(test_BlinnPhongImage cs4212-util)
+target_link_libraries(test_BlinnPhongImage PNG::PNG)
+target_link_libraries(test_BlinnPhongImage ZLIB::ZLIB)

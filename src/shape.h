@@ -9,6 +9,7 @@
     includes section
 */
 #include "ray.h" // ray class
+#include "hitRecord.h"
 
 /// @brief The shape interface which will be used for making different shapes
 class Shape{
@@ -19,7 +20,7 @@ class Shape{
 
         virtual ~Shape() {} // basic deconstructor
 
-        virtual bool intersect(const ray& r, float tmin, float &tmax) = 0; // pure virtual intersect function
+        virtual bool intersect(const ray& r, float tmin, float &tmax, hit_record &rec) = 0; // pure virtual intersect function
 
     private:
 

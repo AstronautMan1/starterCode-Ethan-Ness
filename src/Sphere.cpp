@@ -18,7 +18,7 @@
 /// @return returns true if t1 or t2 is true which is greater than or equal to 0
 ///         which is calculated by taking -b - sqrt of the discriminant / a for t1
 ///         and -b + sqrt of the discriminant / a for t2 otherwise return false
-bool Sphere::intersect(const ray& r, float tmin, float &tmax){
+bool Sphere::intersect(const ray& r, float tmin, float &tmax, hit_record &rec){
 
     vec3 rayToSphere = r.origin() - center; // vector from the sphere center to the ray origin
 
@@ -40,11 +40,19 @@ bool Sphere::intersect(const ray& r, float tmin, float &tmax){
 
     if (t1 >= tmin && t1 <= tmax){
         tmax = t1;
+        rec.setT(t1);
+        rec.setPoint(r.at(rec.getT()));
+        vec3 outward_normal = (rec.getPoint() - center) / radius;
+        rec.set_face_normal(r,outward_normal);
         return true; // if t1 greater or equal to 0 it is intersecting the sphere so return true 
     }
 
     if (t2 >= tmin && t2 <= tmax){
         tmax = t2;
+        rec.setT(t2);
+        rec.setPoint(r.at(rec.getT()));
+        vec3 outward_normal = (rec.getPoint() - center) / radius;
+        rec.set_face_normal(r,outward_normal);
         return true; // if t2 greater or equal to 0 it is intersecting the sphere so return true
     }
 

@@ -9,6 +9,11 @@ add_library (cs4212-util
   Sphere.h Sphere.cpp
   triangle.h triangle.cpp
   hitList.h hitList.cpp
+  hitRecord.h hitRecord.cpp
+  Light.h
+  LambertianShader.h LambertianShader.cpp
+  Shader.h
+  BlinnPhongShader.h BlinnPhongShader.cpp
 )
 
 

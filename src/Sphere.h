@@ -22,7 +22,7 @@ class Sphere : public Shape{
 
         Sphere(point3 centerOfSphere, float radiusOfSphere) : center(centerOfSphere), radius(radiusOfSphere) {} // pass in constructor
 
-        bool intersect(const ray& r, float tmin, float &tmax) override; // override the pure virtual intersect from shape interface
+        bool intersect(const ray& r, float tmin, float &tmax, hit_record &rec) override; // override the pure virtual intersect from shape interface
 
         point3 getCenter(); // getter for the center
 

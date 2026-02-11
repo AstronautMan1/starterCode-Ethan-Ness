@@ -45,7 +45,9 @@ void triangleImage(){
             ray r; // ray r
             pc.generateRay(x, y, r); // generate the ray
 
-            if(s->intersect(r, tmin, tmax)){
+            hit_record rec;
+
+            if(s->intersect(r, tmin, tmax, rec)){
                 fb.setPixelColor(x,y, vec3(1.0,0,0)); // if ray intersects the triangle paint red
             }
             else{

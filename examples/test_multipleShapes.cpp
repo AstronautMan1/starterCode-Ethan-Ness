@@ -53,7 +53,9 @@ void multipleShapeImage(){
             ray r; // ray r
             pc.generateRay(x, y, r); // generate the ray
 
-            if(listOfObjects.intersect(r, tmin, tmax)){
+            hit_record rec;
+
+            if(listOfObjects.intersect(r, tmin, tmax, rec)){
                 fb.setPixelColor(x,y, vec3(1.0,0,0)); // if ray intersects the triangle paint red
             }
             else{

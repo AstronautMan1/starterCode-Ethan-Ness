@@ -21,7 +21,7 @@ class Triangle : public Shape{
 
         Triangle(const vec3 &v0, const vec3 &v1, const vec3 &v2) : vertex_a(v0), vertex_b(v1), vertex_c(v2) {} // parameter pass in constructor
 
-        bool intersect(const ray &r, float tmin, float &tmax) override; // overridden intersect function which is from the Shape interface
+        bool intersect(const ray &r, float tmin, float &tmax, hit_record &rec) override; // overridden intersect function which is from the Shape interface
 
     private:
 
