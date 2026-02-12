@@ -21,11 +21,17 @@ class Triangle : public Shape{
 
         Triangle(const vec3 &v0, const vec3 &v1, const vec3 &v2) : vertex_a(v0), vertex_b(v1), vertex_c(v2) {} // parameter pass in constructor
 
+        Triangle(const vec3 &v0, const vec3 &v1, const vec3 &v2, std::shared_ptr<shader> triangleShader) : vertex_a(v0), vertex_b(v1), vertex_c(v2), shaderPtr(triangleShader) {}
+
         bool intersect(const ray &r, float tmin, float &tmax, hit_record &rec) override; // overridden intersect function which is from the Shape interface
+
+        void setShader(std::shared_ptr<shader> newShader) {shaderPtr = newShader;}
 
     private:
 
         vec3 vertex_a, vertex_b, vertex_c; // the three vertices of the triangle
+
+        std::shared_ptr<shader> shaderPtr;
 
 
 };

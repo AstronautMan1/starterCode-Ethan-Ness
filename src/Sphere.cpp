@@ -42,6 +42,7 @@ bool Sphere::intersect(const ray& r, float tmin, float &tmax, hit_record &rec){
         tmax = t1;
         rec.setT(t1);
         rec.setPoint(r.at(rec.getT()));
+        rec.setShader(shaderPtr);
         vec3 outward_normal = (rec.getPoint() - center) / radius;
         rec.set_face_normal(r,outward_normal);
         return true; // if t1 greater or equal to 0 it is intersecting the sphere so return true 
@@ -51,6 +52,7 @@ bool Sphere::intersect(const ray& r, float tmin, float &tmax, hit_record &rec){
         tmax = t2;
         rec.setT(t2);
         rec.setPoint(r.at(rec.getT()));
+        rec.setShader(shaderPtr);
         vec3 outward_normal = (rec.getPoint() - center) / radius;
         rec.set_face_normal(r,outward_normal);
         return true; // if t2 greater or equal to 0 it is intersecting the sphere so return true

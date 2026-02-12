@@ -27,3 +27,28 @@ bool hitList::intersect(const ray &r, float tmin, float &tmax, hit_record &rec) 
     return hit_object; // return the hit object boolean
 
 }
+
+
+vec3 hitList::computeRayColor(const ray &r, float tmin, float tmax, const Light &light, const vec3 &bgcolor){
+
+    hit_record rec;
+
+    float localTmax = tmax;
+
+    bool hitShape = false;
+
+    for (int index = 0; index < objects.size(); ++index){
+        if(objects[index]->intersect(r,tmin,localTmax,rec)){
+            hitShape = true;
+        }
+    }
+
+    if(hitShape){
+        std::shared_ptr<shader> useShader = rec.getShader() ? rec.getShader() : defaultShader;
+        vec3 color = useShader->rayColor(r,rec,light);
+        return color;
+    }
+    else {
+        return bgcolor;
+    }
+}

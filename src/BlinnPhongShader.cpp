@@ -1,3 +1,9 @@
+/*
+    @author Ethan Ness
+
+    BlinnPhongShader Implementation with ray color
+*/
+
 #include "BlinnPhongShader.h"
 
 vec3 BlinnPhongShader::rayColor(const ray &r, const hit_record &rec, const Light &light) const {
@@ -8,12 +14,12 @@ vec3 BlinnPhongShader::rayColor(const ray &r, const hit_record &rec, const Light
     vec3 H = unit_vector(L + V);
 
     float dotNL = std::max(0.0f, (float)dot(normal, L));
-    vec3 diffuse = dotNL * base * light.getIntensity();
+    vec3 diffuse = dotNL * albedo * light.getIntensity();
 
     float spec = std::pow(std::max(0.0f, (float)dot(normal,H)), shininess);
     vec3 specular = specularStrength * spec * light.getIntensity();
 
-    vec3 ambient = 0.1f * base;
+    vec3 ambient = 0.1f * albedo;
 
     return ambient + diffuse + specular;
 

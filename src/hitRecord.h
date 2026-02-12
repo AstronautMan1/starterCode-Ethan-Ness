@@ -11,6 +11,9 @@
 */
 #include "vec3.h" // vec3 class
 #include "ray.h" // ray class
+#include <memory>
+
+class shader;
 
 /// @brief The hit record class 
 class hit_record {
@@ -27,6 +30,8 @@ class hit_record {
 
         bool getFront_Face() const {return front_face;} // getter for front face
 
+        std::shared_ptr<shader> getShader() const {return shaderPointer;}
+
         void setPoint(point3 newPoint) {point = newPoint;} // setter for the point
 
         void setNormal(vec3 newNormal) {normal = newNormal;} // setter for the normal
@@ -34,6 +39,8 @@ class hit_record {
         void setT(double newT) {t = newT;} // setter for the T value
 
         void setFront_Face(bool newFront_Face) {front_face = newFront_Face;} // setter for the front face
+
+        void setShader(std::shared_ptr<shader> newShader) {shaderPointer = newShader;}
 
     private:
 
@@ -44,5 +51,7 @@ class hit_record {
         double t; // t of the object
 
         bool front_face; // did the ray hit the front or back of the object true if front
+
+        std::shared_ptr<shader> shaderPointer;
 
 };

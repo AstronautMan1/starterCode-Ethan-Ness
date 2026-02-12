@@ -18,7 +18,7 @@ class LambertianShader : public shader{
 
     public:
 
-        LambertianShader(const vec3 &color) : base(color) {} // constructor takes vec3 color to set the base color
+        LambertianShader(const vec3 &color) : albedo(color) {} // constructor takes vec3 color to set the base color
 
         virtual vec3 rayColor(const ray &r, const hit_record &rec, const Light &light) const override; // rayColor function which it inherited from shader
 
@@ -26,6 +26,6 @@ class LambertianShader : public shader{
     private:
 
         
-        vec3 base; // base color which is a vec3
+        vec3 albedo; // base color which is a vec3
 
 };

@@ -21,7 +21,6 @@
 void BlinnPhongShadeImage(){
 
     Framebuffer fb(900,600); // framebuffer creation
-    hitList listOfObjects; // list of objects
     float aspectRatio = static_cast<float>(fb.getWidth()) / static_cast<float>(fb.getHeight()); // set up aspect ratio calculation
 
     vec3 position(0,0,5); // position of camera
@@ -37,13 +36,13 @@ void BlinnPhongShadeImage(){
 
     hitList scene; // make the hitlist for objects
 
-    std::shared_ptr<Shape> s1 = std::make_shared<Sphere>(point3(0,0,-1.0f), 0.5f); // shared pointer of the sphere with a center location of 0,0,-1 and a radius of 0.5
-
-    scene.add(s1); // added the shape to the scene hit list
-
     Light mainlight(point3(5,5,5), vec3(1,1,1)); // light object at a position of 5,5,5 (x,y,z) and an intensity of 1,1,1 (white light)
 
-    BlinnPhongShader BlueShade(vec3(0.2,0.2,1.0), 150.0f, 0.6); // LambertianShader blueshade it is a blue shader of Lambertian
+    auto BlueShade = std::make_shared<BlinnPhongShader>(vec3(0.2,0.2,1.0), 150.0f, 0.6); // LambertianShader blueshade it is a blue shader of Lambertian
+
+    std::shared_ptr<Shape> s1 = std::make_shared<Sphere>(point3(0,0,-1.0f), 0.5f, BlueShade); // shared pointer of the sphere with a center location of 0,0,-1 and a radius of 0.5
+
+    scene.add(s1); // added the shape to the scene hit list
 
     // for loop going through pixels
     for (int x = 0; x < fb.getWidth(); ++x){
@@ -54,15 +53,8 @@ void BlinnPhongShadeImage(){
             ray r; // ray r
             pc.generateRay(x, y, r); // generate the ray at pixel
 
-            hit_record rec; // hit record 
+            vec3 color = scene.computeRayColor(r,tmin,tmax,mainlight,nullptr,vec3(0.5, 0.5, 0.5));
 
-            if(scene.intersect(r, tmin, tmax, rec)){ // if the intersect function returns true 
-                vec3 color = BlueShade.rayColor(r,rec,mainlight); // color is equal to rayColor function
-                fb.setPixelColor(x,y,color); // set the pixel
-            }
-            else{ 
-                fb.setPixelColor(x,y,vec3(0.5,0.5,0.5)); // if ray doesn't intersect the triangle paint gray
-            }
         }
     }
 

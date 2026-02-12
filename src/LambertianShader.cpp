@@ -21,5 +21,5 @@ vec3 LambertianShader::rayColor(const ray &r, const hit_record &rec, const Light
 
     float cosine_theta = std::max(0.0f, (float)dot(rec.getNormal(), light_direction)); // this does dot product between surface normal and light direction which gives the cosine of the two
 
-    return base * light.getIntensity() * cosine_theta; // then we return the base color * lights color * cosine theta
+    return albedo * light.getIntensity() * cosine_theta; // then we return the base color * lights color * cosine theta
 }

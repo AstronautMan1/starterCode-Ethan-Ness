@@ -9,7 +9,6 @@
 /*
     Includes section
 */
-#include "hitList.h" // hit list class
 #include "vec3.h" // vec3 class
 #include "ray.h" // ray class
 #include "hitRecord.h" // hit record class

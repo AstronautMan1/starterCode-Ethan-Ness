@@ -22,6 +22,8 @@ class Sphere : public Shape{
 
         Sphere(point3 centerOfSphere, float radiusOfSphere) : center(centerOfSphere), radius(radiusOfSphere) {} // pass in constructor
 
+        Sphere(point3 centerOfSphere, float radiusOfSphere, std::shared_ptr<shader> sphereShader) : center(centerOfSphere), radius(radiusOfSphere), shaderPtr(sphereShader) {}
+
         bool intersect(const ray& r, float tmin, float &tmax, hit_record &rec) override; // override the pure virtual intersect from shape interface
 
         point3 getCenter(); // getter for the center
@@ -32,10 +34,14 @@ class Sphere : public Shape{
 
         void setRadius(float newRadius); // setter for a new radius
 
+        void setShader(std::shared_ptr<shader> newShader) {shaderPtr = newShader;}
+
     private:
 
         point3 center; // center of the sphere
 
         float radius; // radius of the sphere
+
+        std::shared_ptr<shader> shaderPtr;
 
 };

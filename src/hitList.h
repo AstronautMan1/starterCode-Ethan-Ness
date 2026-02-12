@@ -13,6 +13,7 @@
 #include "shape.h" // shape class
 #include "hitRecord.h"
 #include "Shader.h"
+#include "Light.h"
 #include <vector> // vector library
 
 /// @brief The hitList class is a class which has a vector of shared pointers to shape objects and inherits the public of the shape class and has its own intersect 
@@ -28,6 +29,8 @@ class hitList : public Shape{
         void clear() {objects.clear();} // clear vector list
 
         bool intersect(const ray &r, float tmin, float &tmax, hit_record &rec) override; // pure virtual intersect overriden from Shape class
+
+        vec3 computeRayColor(const ray &r, float tmin, float tmax, const Light &light, const vec3 &bgcolor);
 
     private:
 
