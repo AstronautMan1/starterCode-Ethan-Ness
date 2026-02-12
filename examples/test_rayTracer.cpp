@@ -41,12 +41,12 @@ vec3 directionToColor(const vec3 &direction){
 /// @brief Ray Tester is the actual tester of the ray tracer
 void rayTester(){
 
-    Framebuffer fb(400,400); // size of the framebuffer screen
+    Framebuffer fb(5120,2880); // size of the framebuffer screen
 
     vec3 position(0,0,-1); // position of the camera
-    vec3 U(-15,0,0); // direction on the x axis the camera is looking
-    vec3 V(0,1.2,0); // direction on the y axis the camera is looking
-    vec3 W(0,0,3.14159); // direction on the z axis the camera is looking
+    vec3 U(1,0,0); // direction on the x axis the camera is looking
+    vec3 V(0,1,0); // direction on the y axis the camera is looking
+    vec3 W(0,0,1); // direction on the z axis the camera is looking
     float focal = 0.0325f; // the field of view of the camera
     float planeWidth = 0.5f; // width of the plane
     float planeHeight = 0.5f; // length of the plane

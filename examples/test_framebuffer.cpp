@@ -14,7 +14,7 @@
 
 /// @brief This just creates a red image with the center pixel being green
 void redWithCenterGreen(){
-    Framebuffer fb(100, 100);
+    Framebuffer fb(400, 400);
     vec3 red(1.0f, 0.0f, 0.0f);
     fb.clearToColor(red);
     fb.setPixelColor(50, 50, vec3(0.0f, 1.0f, 0.0f)); // green pixel
