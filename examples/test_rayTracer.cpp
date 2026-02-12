@@ -71,10 +71,44 @@ void rayTester(){
 
 }
 
+
+void rayTesterSmall(){
+
+    Framebuffer fb(400,400); // size of the framebuffer screen
+
+    vec3 position(0,0,-1); // position of the camera
+    vec3 U(1,0,0); // direction on the x axis the camera is looking
+    vec3 V(0,1,0); // direction on the y axis the camera is looking
+    vec3 W(0,0,1); // direction on the z axis the camera is looking
+    float focal = 0.0325f; // the field of view of the camera
+    float planeWidth = 0.5f; // width of the plane
+    float planeHeight = 0.5f; // length of the plane
+
+    PerspectiveCamera pc(position, U, V, W, focal, planeWidth, planeHeight, fb.getWidth(), fb.getHeight()); // build the perspective camera
+
+    // for loop to get the color for every pixel in the image
+    for(int x(0); x < fb.getWidth(); ++x){
+        for(int y(0); y < fb.getHeight(); ++y){
+
+            ray R;
+
+            pc.generateRay(x,y,R);
+
+            vec3 color = directionToColor(R.direction());
+
+            fb.setPixelColor(x, y, color);
+        }
+    }
+
+    fb.exportToPNG("raytracetesterSmall.png"); // export to a png
+
+}
+
 /// @brief Main function that just runs the rayTester function
 /// @return standard 0 return
 int main(){
 
     rayTester();
+    rayTesterSmall();
     return 0;
 }
