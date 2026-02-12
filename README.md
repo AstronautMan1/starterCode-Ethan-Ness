@@ -1,3 +1,30 @@
+## Steganography use
+
+The steganography implementation uses LSB(Least Significant Bit) to store a file in the rightmost bit of a color channel across pixels in the PNG image
+in order to run this program you do the following
+
+Make the build folder
+```
+cd <path/to/buildfile>
+cmake --build .
+```
+
+Use the encoder for encoding message
+```
+cd <build/examples/debug>
+./test_encoder {name of file to be encoded} {name of PNG file (must have .png at the end)}
+```
+
+Use the decoder to decode the message from an image
+```
+cd <build/examples/debug>
+./test_decoder {Name of the PNG file with the Payload} {name of the file you want to write the payload to}
+```
+
+when you run the encoder you load a payload into the png image then the decoder will output the payload into a new file
+
+## Cmake Info
+
 This project uses CMake and vcpkg for managing C++ dependencies. It serves as a simple example to test your build setup before we get into more complicted code.
 
 ## Building Using CMake Presets
