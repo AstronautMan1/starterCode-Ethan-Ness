@@ -70,6 +70,7 @@ bool Triangle::intersect(const ray &r, float tmin, float &tmax, hit_record &rec)
         vec3 outward_normal = unit_vector(cross(edge1,edge2));
 
         rec.set_face_normal(r, outward_normal);
+        rec.setShader(shaderPtr);
         
         return true;
     }
