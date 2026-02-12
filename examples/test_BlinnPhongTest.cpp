@@ -23,12 +23,12 @@ void BlinnPhongShadeImage(){
     Framebuffer fb(900,600); // framebuffer creation
     float aspectRatio = static_cast<float>(fb.getWidth()) / static_cast<float>(fb.getHeight()); // set up aspect ratio calculation
 
-    vec3 position(0,0,15); // position of camera
+    vec3 position(0,0,5); // position of camera
     vec3 U(1,0,0); // x axis direction camera is looking
     vec3 V(0,1,0); // y axis direction camera is looking
     vec3 W(0,0,1); // z axis direction camera is looking
     float focal = 1.0f; // focal size
-    float planeHeight = 1.0f; // plane height
+    float planeHeight = 0.5f; // plane height
     float planeWidth = planeHeight * aspectRatio; // plane width
     float tmin = 0.001f; // initialize tmin
 
@@ -42,10 +42,10 @@ void BlinnPhongShadeImage(){
 
     std::shared_ptr<Shape> s1 = std::make_shared<Sphere>(point3(0,0,-1.0f), 0.5f, GreenShade); // shared pointer of the sphere with a center location of 0,0,-1 and a radius of 0.5
 
-    std::shared_ptr<Shape> s2 = std::make_shared<Triangle>(point3(3,3,-1), point3(4,6,-1), point3(5,3,-1), GreenShade);
+    //std::shared_ptr<Shape> s2 = std::make_shared<Triangle>(point3(3,3,-1), point3(4,6,-1), point3(5,3,-1), GreenShade);
 
     scene.add(s1); // added the shape to the scene hit list
-    scene.add(s2);
+    //scene.add(s2);
 
     // for loop going through pixels
     for (int x = 0; x < fb.getWidth(); ++x){
