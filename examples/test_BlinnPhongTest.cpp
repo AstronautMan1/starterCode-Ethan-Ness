@@ -38,7 +38,7 @@ void BlinnPhongShadeImage(){
 
     Light mainlight(point3(5,5,5), vec3(1,1,1)); // light object at a position of 5,5,5 (x,y,z) and an intensity of 1,1,1 (white light)
 
-    auto BlueShade = std::make_shared<BlinnPhongShader>(vec3(0.2,0.2,1.0), 150.0f, 0.6); // LambertianShader blueshade it is a blue shader of Lambertian
+    auto BlueShade = std::make_shared<BlinnPhongShader>(vec3(0.2,0.2,1.0), 150.0f, 0.6f); // LambertianShader blueshade it is a blue shader of Lambertian
 
     std::shared_ptr<Shape> s1 = std::make_shared<Sphere>(point3(0,0,-1.0f), 0.5f, BlueShade); // shared pointer of the sphere with a center location of 0,0,-1 and a radius of 0.5
 
@@ -53,8 +53,9 @@ void BlinnPhongShadeImage(){
             ray r; // ray r
             pc.generateRay(x, y, r); // generate the ray at pixel
 
-            vec3 color = scene.computeRayColor(r,tmin,tmax,mainlight,nullptr,vec3(0.5, 0.5, 0.5));
+            vec3 color = scene.computeRayColor(r,tmin,tmax,mainlight, vec3(0.5, 0.5, 0.5));
 
+            fb.setPixelColor(x,y,color);
         }
     }
 

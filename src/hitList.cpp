@@ -44,7 +44,7 @@ vec3 hitList::computeRayColor(const ray &r, float tmin, float tmax, const Light 
     }
 
     if(hitShape){
-        std::shared_ptr<shader> useShader = rec.getShader() ? rec.getShader() : defaultShader;
+        std::shared_ptr<shader> useShader = rec.getShader();
         vec3 color = useShader->rayColor(r,rec,light);
         return color;
     }
