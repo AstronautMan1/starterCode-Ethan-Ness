@@ -16,6 +16,7 @@ Includes
 #include "camera.h" // camera class
 #include "PerspectiveCamera.h" // perspective camera
 #include <iostream> // iostream library
+#include <string> // string library
 
 
 
@@ -36,9 +37,9 @@ vec3 directionToColor(const vec3 &direction){
 /// @brief 
 /// @param secretFile 
 /// @param outputFile 
-void steg_tester(const std::string &secretFile, const std::string &outputFile){
+void steg_tester(const std::string &secretFile, const std::string &outputFile, int width, int height){
 
-    Framebuffer fb(5120,2880); // size of the framebuffer screen
+    Framebuffer fb(width,height); // size of the framebuffer screen
 
     vec3 position(0,0,-1); // position of the camera
     vec3 U(1,0,0); // direction on the x axis the camera is looking
@@ -79,15 +80,17 @@ void steg_tester(const std::string &secretFile, const std::string &outputFile){
 /// @return we return 1 if less then 3 args return 0 otherwise
 int main(int argc, char* argv[]){
 
-    if (argc < 3){ // if less then 3 arguments passed in we throw errors
-        std::cout << "Usage: ./test_encoder <file_to_hide> <output_png_name>" << std::endl;
-        std::cout << "Example: ./test_encoder secret.zip encoded_image.png" << std::endl;
+    if (argc < 5){ // if less then 3 arguments passed in we throw errors
+        std::cout << "Usage: ./test_encoder <file_to_hide> <output_png_name> <image_width> <image_height>" << std::endl;
+        std::cout << "Example: ./test_encoder secret.zip encoded_image.png 400 400" << std::endl;
         return 1;
     }
 
     std::string secret = argv[1]; // our secret file to use as payload is the first argument
     std::string output = argv[2]; // the output file name is the second argument
+    int width = std::stoi(argv[3]); // width of the image
+    int height = std::stoi(argv[4]); // height of the image
 
-    steg_tester(secret, output); // call steg_tester passing in the secret file and output file
+    steg_tester(secret, output, width, height); // call steg_tester passing in the secret file and output file
     return 0;
 }

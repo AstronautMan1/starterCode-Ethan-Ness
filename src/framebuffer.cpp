@@ -99,7 +99,7 @@ void Framebuffer::exportToPNG(std::string filename){
 
     encoding: message bytes -> extracts bits --> embed the buts in LSB of sequential color channels
 
-    header ecoding: first 32 channels are for storing the message file size (header) later for decoding
+    header ecoding: first 32 channels are for storing the message file size (header) later for decoding basically it is to tell the decoder later how big the file needs to be.
 
     Decoding: we read first 32 channels for file size -> read file size in bits -> then reconstruct the bytes from the bits
 
