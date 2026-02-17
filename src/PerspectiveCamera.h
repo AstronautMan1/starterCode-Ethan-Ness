@@ -16,7 +16,7 @@ class PerspectiveCamera : public Camera {
 
     public:
 
-        PerspectiveCamera() : Camera() {}
+        PerspectiveCamera() : Camera() {} // base constructor
 
         PerspectiveCamera(vec3 position, vec3 valueU, vec3 valueV, vec3 valueW, float focal, float planeWidth, float planeLength, int imageWidth, int imageHeight) 
         : pos(position), U(valueU), V(valueV), W(valueW), focalLength(focal), imagePlane_Width(planeWidth), imagePlane_Length(planeLength), nx(imageWidth), ny(imageHeight) {
@@ -24,13 +24,13 @@ class PerspectiveCamera : public Camera {
             rightBound = planeWidth / 2.0f;
             bottomBound = -planeLength / 2.0f;
             topBound = planeLength / 2.0f;
-        }
+        } // pass in constructor
 
-        void generateRay(int i, int j, ray &r) override;
+        void generateRay(int i, int j, ray &r) override; // generate ray override
 
-        void setNX(int width) {nx = width;}
+        void setNX(int width) {nx = width;} // set the width
 
-        void setNY(int height) {ny = height;}
+        void setNY(int height) {ny = height;} // set the height
 
 
     private:

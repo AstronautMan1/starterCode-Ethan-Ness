@@ -9,7 +9,7 @@
     includes section
 */
 #include "ray.h" // ray class
-#include "hitRecord.h"
+#include "hitRecord.h" // hit record class
 
 /// @brief The shape interface which will be used for making different shapes
 class Shape{

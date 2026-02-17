@@ -11,7 +11,7 @@
 */
 #include "vec3.h" // vec3 class
 #include "ray.h" // ray class
-#include <memory>
+#include <memory> // memory library
 
 class shader;
 
@@ -52,6 +52,6 @@ class hit_record {
 
         bool front_face; // did the ray hit the front or back of the object true if front
 
-        std::shared_ptr<shader> shaderPointer;
+        std::shared_ptr<shader> shaderPointer; // shader pointer
 
 };

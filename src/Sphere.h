@@ -42,6 +42,6 @@ class Sphere : public Shape{
 
         float radius; // radius of the sphere
 
-        std::shared_ptr<shader> shaderPtr;
+        std::shared_ptr<shader> shaderPtr; // shader pointer
 
 };

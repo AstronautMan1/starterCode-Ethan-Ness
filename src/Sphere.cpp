@@ -49,12 +49,19 @@ bool Sphere::intersect(const ray& r, float tmin, float &tmax, hit_record &rec){
     }
 
     if (t2 >= tmin && t2 <= tmax){
-        tmax = t2;
-        rec.setT(t2);
-        rec.setPoint(r.at(rec.getT()));
-        rec.setShader(shaderPtr);
-        vec3 outward_normal = (rec.getPoint() - center) / radius;
-        rec.set_face_normal(r,outward_normal);
+
+        tmax = t2; // set tmax equal to t2
+
+        rec.setT(t2); // set the T in the hit record to t2
+
+        rec.setPoint(r.at(rec.getT())); // set the point of impact for tay at r of T
+
+        rec.setShader(shaderPtr); // set the shader of sphere with shader ptr
+
+        vec3 outward_normal = (rec.getPoint() - center) / radius; // outward normal is the point of ray impact - center / radius
+
+        rec.set_face_normal(r,outward_normal); // we set the face normal in hit record with ray and outward normal
+
         return true; // if t2 greater or equal to 0 it is intersecting the sphere so return true
     }
 

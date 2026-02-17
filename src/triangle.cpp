@@ -59,20 +59,21 @@ bool Triangle::intersect(const ray &r, float tmin, float &tmax, hit_record &rec)
     if(gamma < 0.0 || (beta + gamma) > 1.0) return false; // if gamma is less then 0 or beta + gamma is greater then 1 return false
 
     if (t >= tmin && t <= tmax) { // if t is greater then or equal to tmin and t is less than or equal to tmax set t as the new tmax and return true
-        tmax = (float)t;
 
-        rec.setT((double)t);
-        rec.setPoint(r.at(rec.getT()));
+        tmax = (float)t; // tmax is t
 
-        vec3 edge1 = vertex_b - vertex_a;
-        vec3 edge2 = vertex_c - vertex_a;
+        rec.setT((double)t); // set T value to t in hit record
+        rec.setPoint(r.at(rec.getT())); // set the point of impact for ray in the hit record
 
-        vec3 outward_normal = unit_vector(cross(edge1,edge2));
+        vec3 edge1 = vertex_b - vertex_a; // edge 1 is vertex b - a
+        vec3 edge2 = vertex_c - vertex_a; // edge 2 is vertex c - a
 
-        rec.set_face_normal(r, outward_normal);
-        rec.setShader(shaderPtr);
+        vec3 outward_normal = unit_vector(cross(edge1,edge2)); // outward normal is the unit vector of the cross product of edge 1 and edge 2
+
+        rec.set_face_normal(r, outward_normal); // set the face normal as ray r and outward normal
+        rec.setShader(shaderPtr); // set the shader of triangle with shaderptr
         
-        return true;
+        return true; // return true
     }
 
     return false; // if nothing else return false

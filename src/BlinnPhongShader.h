@@ -12,22 +12,22 @@
 */
 #include "Shader.h" // shader class
 
-/// @brief 
+/// @brief This is the blinnphongshader which uses the shader interface for the implementation
 class BlinnPhongShader : public shader {
 
     public:
 
-        BlinnPhongShader(vec3 b, float shine, float spec) : albedo(b), shininess(shine), specularStrength(spec) {}
+        BlinnPhongShader(vec3 b, float shine, float spec) : albedo(b), shininess(shine), specularStrength(spec) {} // constructor
 
-        virtual vec3 rayColor(const ray &r, const hit_record &rec, const Light &light) const override;
+        virtual vec3 rayColor(const ray &r, const hit_record &rec, const Light &light) const override; // override of ray color
         
 
     private:
 
-        vec3 albedo;
+        vec3 albedo; // albedo for the basic ray color
 
-        float shininess;
+        float shininess; // the shininess for the blinn phong calculation
 
-        float specularStrength;
+        float specularStrength; // strength of the specular reflection
 
 };

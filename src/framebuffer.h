@@ -18,23 +18,23 @@
 ///        export the image as a png file.
 class Framebuffer {
     public:
-        Framebuffer();
+        Framebuffer(); // constructor
 
-        Framebuffer(int w, int h);
+        Framebuffer(int w, int h); // input constructor
 
-        void Setwidth(int x);
+        void Setwidth(int x); // set width
 
-        void Setheight(int y);
+        void Setheight(int y); // set height
 
-        int getWidth();
+        int getWidth(); // get width
 
-        int getHeight();
+        int getHeight(); // get height
 
-        void clearToColor(vec3 c);
+        void clearToColor(vec3 c); // clear to a color
 
-        void setPixelColor(int i, int j, vec3 c);
+        void setPixelColor(int i, int j, vec3 c); // set the pixel at (i,j) to a color
 
-        void exportToPNG(std::string filename);
+        void exportToPNG(std::string filename); // export to a png
 
     private:
 

@@ -31,7 +31,7 @@ class Triangle : public Shape{
 
         vec3 vertex_a, vertex_b, vertex_c; // the three vertices of the triangle
 
-        std::shared_ptr<shader> shaderPtr;
+        std::shared_ptr<shader> shaderPtr; // shader pointer
 
 
 };
