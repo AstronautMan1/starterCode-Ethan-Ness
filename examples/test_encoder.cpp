@@ -80,7 +80,7 @@ void steg_tester(const std::string &secretFile, const std::string &outputFile, i
 /// @return we return 1 if less then 3 args return 0 otherwise
 int main(int argc, char* argv[]){
 
-    if (argc < 5){ // if less then 3 arguments passed in we throw errors
+    if (argc < 5){ // if less then 5 arguments passed in we throw errors
         std::cout << "Usage: ./test_encoder <file_to_hide> <output_png_name> <image_width> <image_height>" << std::endl;
         std::cout << "Example: ./test_encoder secret.zip encoded_image.png 400 400" << std::endl;
         return 1;
