@@ -30,7 +30,7 @@ class hitList : public Shape{
 
         bool intersect(const ray &r, float tmin, float &tmax, hit_record &rec) override; // pure virtual intersect overriden from Shape class
 
-        vec3 computeRayColor(const ray &r, float tmin, float tmax, const Light &light, const vec3 &bgcolor); // compute ray color function
+        vec3 computeRayColor(const ray &r, float tmin, float tmax, const Light &light, const vec3 &bgcolor, int depth); // compute ray color function
 
     private:
 

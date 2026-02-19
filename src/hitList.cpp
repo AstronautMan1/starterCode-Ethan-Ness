@@ -34,8 +34,13 @@ bool hitList::intersect(const ray &r, float tmin, float &tmax, hit_record &rec) 
 /// @param tmax the tmax value
 /// @param light the light object which says where the light is
 /// @param bgcolor the bg color for the space
+/// @param depth For recursion for reflections (not used here but is needed for interface compliance)
 /// @return we return either the color of the ray if intersect otherwise return background color
-vec3 hitList::computeRayColor(const ray &r, float tmin, float tmax, const Light &light, const vec3 &bgcolor){
+vec3 hitList::computeRayColor(const ray &r, float tmin, float tmax, const Light &light, const vec3 &bgcolor, int depth){
+
+    if (depth <= 0){ // if depth is less than or equal to 0 return bgcolor
+        return bgcolor;
+    }
 
     hit_record rec; // make a hit record
 
@@ -51,7 +56,7 @@ vec3 hitList::computeRayColor(const ray &r, float tmin, float tmax, const Light 
 
     if(hitShape){ // if we hit a shape we set get the shader for the object
         std::shared_ptr<shader> useShader = rec.getShader(); // get the shader for the object of the ray we hit
-        vec3 color = useShader->rayColor(r,rec,light); // get the ray color based on that ray r
+        vec3 color = useShader->rayColor(r,rec,light, *this, depth); // get the ray color based on that ray r (*this is refencing itself <hitlist>)
         return color; // return color
     }
     else { // otherwise return background color

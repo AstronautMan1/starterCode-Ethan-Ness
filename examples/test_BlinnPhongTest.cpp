@@ -56,7 +56,7 @@ void BlinnPhongShadeImage(){
             ray r; // ray r
             pc.generateRay(x, y, r); // generate the ray at pixel
 
-            vec3 color = scene.computeRayColor(r,tmin,tmax,mainlight, vec3(0.5, 0.5, 0.5));
+            vec3 color = scene.computeRayColor(r,tmin,tmax,mainlight, vec3(0.5, 0.5, 0.5), 5);
 
             fb.setPixelColor(x,y,color);
         }

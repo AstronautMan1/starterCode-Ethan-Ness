@@ -14,6 +14,7 @@ add_library (cs4212-util
   LambertianShader.h LambertianShader.cpp
   Shader.h
   BlinnPhongShader.h BlinnPhongShader.cpp
+  MirrorShader.h MirrorShader.cpp
 )
 
 

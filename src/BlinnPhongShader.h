@@ -12,6 +12,8 @@
 */
 #include "Shader.h" // shader class
 
+class hitList; // forward declaration to avoid circular inclusion
+
 /// @brief This is the blinnphongshader which uses the shader interface for the implementation
 class BlinnPhongShader : public shader {
 
@@ -19,7 +21,7 @@ class BlinnPhongShader : public shader {
 
         BlinnPhongShader(vec3 b, float shine, float spec) : albedo(b), shininess(shine), specularStrength(spec) {} // constructor
 
-        virtual vec3 rayColor(const ray &r, const hit_record &rec, const Light &light) const override; // override of ray color
+        virtual vec3 rayColor(const ray &r, const hit_record &rec, const Light &light, hitList &scene, int depth) const override; // override of ray color
         
 
     private:

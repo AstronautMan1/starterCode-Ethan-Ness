@@ -27,7 +27,7 @@ class Camera {
 
         virtual ~Camera() {} // camera deconstructor
 
-        virtual void generateRay(int i, int j, ray &r) = 0; // generate ray function
+        virtual void generateRay(float i, float j, ray &r) = 0; // generate ray function
 
 
     private:

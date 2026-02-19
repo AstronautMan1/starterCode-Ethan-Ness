@@ -13,7 +13,7 @@
 /// @param i this is the x position of the ray
 /// @param j this is the y position of the ray
 /// @param R this is a reference to a ray R that is the ray that we generate
-void PerspectiveCamera::generateRay (int i, int j, ray &R){
+void PerspectiveCamera::generateRay (float i, float j, ray &R){
 
     R.setOrigin(pos); // set the origin of the ray with the position of the camera
 

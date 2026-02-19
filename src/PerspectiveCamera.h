@@ -26,7 +26,7 @@ class PerspectiveCamera : public Camera {
             topBound = planeLength / 2.0f;
         } // pass in constructor
 
-        void generateRay(int i, int j, ray &r) override; // generate ray override
+        void generateRay(float i, float j, ray &r) override; // generate ray override
 
         void setNX(int width) {nx = width;} // set the width
 

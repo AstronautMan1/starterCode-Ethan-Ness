@@ -1,8 +1,7 @@
 /*
     @author Ethan Ness
 
-    This is a tester for lambertian shading
-
+    An implementation of a anti aliasing for the image generation
 */
 
 /*
@@ -15,10 +14,20 @@
 #include "triangle.h" // triangle class
 #include "LambertianShader.h" // lambertianShader Class
 #include "Light.h" // light class
+#include <random> // random library
+
+/// @brief This is a random offset funtion which gives a random offset for our pixels for anti aliasing generation
+/// @return We return the float random distribution
+float randomOffset() {
+
+    static std::uniform_real_distribution<double> distribution(0.0,1.0); // random distribution from 0.0 - 1.0
+    static std::mt19937 generator; // mt19937 generator 
+    return distribution(generator); // return the distribution range with that generator
+}
 
 
-/// @brief This is the lambert shader image maker function which makes the image
-void LambertShadeImage(){
+/// @brief This is the lambert shader image maker function which makes the image with anti aliasing
+void LambertianAntiAliasing(){
 
     Framebuffer fb(900,600); // framebuffer creation
     hitList listOfObjects; // list of objects
@@ -32,6 +41,7 @@ void LambertShadeImage(){
     float planeHeight = 0.5f; // plane height
     float planeWidth = planeHeight * aspectRatio; // plane width
     float tmin = 0.001f; // initialize tmin
+    int rpp_NSquare = 4; // rpp NSquare breaking pixel into 4x4 subsections
 
     PerspectiveCamera pc(position, U, V, W, focal, planeWidth, planeHeight, fb.getWidth(), fb.getHeight()); // making the perspective camera
 
@@ -45,27 +55,41 @@ void LambertShadeImage(){
 
     scene.add(s1); // added the shape to the scene hit list
 
-    // for loop going through pixels
+    // for loop going through pixels with another for loop for antialiasing
     for (int x = 0; x < fb.getWidth(); ++x){
         for(int y = 0; y < fb.getHeight(); ++y){ 
 
-            float tmax = std::numeric_limits<float>::infinity(); // set tmax as infinity
-            ray r; // ray r
-            pc.generateRay(x, y, r); // generate the ray at pixel
+            vec3 color(0.0,0.0,0.0); // reset the color for the anti aliasing handling
 
-            vec3 color = scene.computeRayColor(r,tmin, tmax, mainlight, vec3(0.5,0.5,0.5), 5);
-            fb.setPixelColor(x,y,color);
+            for (int p = 0; p < rpp_NSquare; ++p){
+                for (int q = 0; q < rpp_NSquare; ++q){
+
+                    float tmax = std::numeric_limits<float>::infinity(); // set tmax as infinity
+                    ray r; // ray r
+
+                    float pOffset = (p + randomOffset() / rpp_NSquare); // the offset for p
+                    float qOffset = (q + randomOffset() / rpp_NSquare); // the offset for q
+
+                    pc.generateRay(x+p, y+q, r); // generate a ray with p adn q offset added to the pixel
+
+                    color += scene.computeRayColor(r, tmin, tmax, mainlight, vec3(0.5,0.5,0.5), 5); // compute the ray color with that anti aliasing
+                }
+            }
+
+            color = color / (rpp_NSquare * rpp_NSquare); // color of the pixel is color divided by NSquare * NSquare
+
+            fb.setPixelColor(x,y,color); // set the pixel color
         }
     }
 
 
-    fb.exportToPNG("ShaderLambertTest.png"); // png image output of shaderlambert
+    fb.exportToPNG("LambertianAntiAliasingTest.png"); // png image output of shaderlambert with anti aliasing
 }
 
 /// @brief The main function that calls LambertShadeImage function
 /// @return just returns 0
 int main(){
 
-    LambertShadeImage();
+    LambertianAntiAliasing();
     return 0;
 }

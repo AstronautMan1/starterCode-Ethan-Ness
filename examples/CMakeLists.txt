@@ -77,3 +77,17 @@ add_executable(test_BlinnPhongImage
 target_link_libraries(test_BlinnPhongImage cs4212-util)
 target_link_libraries(test_BlinnPhongImage PNG::PNG)
 target_link_libraries(test_BlinnPhongImage ZLIB::ZLIB)
+
+add_executable(test_LambertianAntiAliasing
+  test_AntiAliasingTest.cpp
+)
+target_link_libraries(test_LambertianAntiAliasing cs4212-util)
+target_link_libraries(test_LambertianAntiAliasing PNG::PNG)
+target_link_libraries(test_LambertianAntiAliasing ZLIB::ZLIB)
+
+add_executable(test_MirrorShader
+  test_MirrorShader.cpp
+)
+target_link_libraries(test_MirrorShader cs4212-util)
+target_link_libraries(test_MirrorShader PNG::PNG)
+target_link_libraries(test_MirrorShader ZLIB::ZLIB)

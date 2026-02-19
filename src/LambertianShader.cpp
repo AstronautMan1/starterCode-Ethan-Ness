@@ -14,8 +14,10 @@
 /// @param r ray passed in
 /// @param rec the hit record for the object
 /// @param light the lights in the scene
+/// @param scene the hit list for recursive ray tracing
+/// @param depth the recursion depth for ray tracing reflections (not used here just needed for interface override compliance)
 /// @return we return a vec3 which is the color of that pixel
-vec3 LambertianShader::rayColor(const ray &r, const hit_record &rec, const Light &light) const {
+vec3 LambertianShader::rayColor(const ray &r, const hit_record &rec, const Light &light, hitList &scene, int depth) const {
 
     vec3 light_direction = unit_vector(light.getPosition() - rec.getPoint()); // we get the direction of the color by the unit vector of the lights position and the point of the shape in hit_record
 

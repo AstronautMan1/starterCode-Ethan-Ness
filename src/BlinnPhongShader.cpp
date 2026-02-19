@@ -14,8 +14,10 @@
 /// @param r ray object
 /// @param rec hit record object
 /// @param light light object
+/// @param scene the hit list for recursive ray tracing for reflections
+/// @param depth the recursion depth for ray tracing reflections
 /// @return we return the ambient + diffuse + specular
-vec3 BlinnPhongShader::rayColor(const ray &r, const hit_record &rec, const Light &light) const {
+vec3 BlinnPhongShader::rayColor(const ray &r, const hit_record &rec, const Light &light, hitList &scene, int depth) const {
 
     vec3 normal = rec.getNormal(); // normal from the hit record
     vec3 L = unit_vector(light.getPosition() - rec.getPoint()); // L is the unit vector of the light position - point of ray intersect
