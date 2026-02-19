@@ -1,14 +1,14 @@
 /*
     @author Ethan Ness
 
-    Mirror Shader implementation with recursive ray tracing using depth
+    Mirror Shader implementation 
 */
 
 /*
     includes section
 */
 #include "MirrorShader.h" // mirror shader class
-#include "hitList.h" // hitlist class for recursive tracing
+#include "hitList.h" // hitlist class for recursive tracing for the reflection
 
 /// @brief This handles the ray color in the mirror shading style using depth for recursion
 /// @param r ray passed in
@@ -26,17 +26,17 @@ vec3 MirrorShader::rayColor(const ray &r, const hit_record &rec, const Light &li
     // Calculate the reflected ray direction
     vec3 incident = unit_vector(r.direction()); // normalize the incident ray direction
     vec3 normal = rec.getNormal(); // get the surface normal
-    vec3 reflected_dir = reflect(incident, normal); // reflect the incident direction about the normal
+    vec3 reflected_dir = reflect(incident, normal); // reflect the incident direction about the normal with the reflect function in vec3 (v - 2 * dot(v, n) * n)
 
     // Create a reflected ray starting from the hit point
-    ray reflected_ray(rec.getPoint() + normal * 0.001f, reflected_dir); // slightly offset to avoid self-intersection
+    ray reflected_ray(rec.getPoint() + normal * 0.001f, reflected_dir); // slightly offset to avoid self-intersection which is why we have 0.001f there
 
     float tmin = 0.001f; // minimum t value for ray intersection
-    float tmax = std::numeric_limits<float>::infinity(); // maximum t value
+    float tmax = std::numeric_limits<float>::infinity(); // maximum t value to infinity
 
     // Recursively trace the reflected ray and blend with reflectance
     vec3 reflected_color = scene.computeRayColor(reflected_ray, tmin, tmax, light, vec3(0.0f, 0.0f, 0.0f), depth - 1);
 
-    // Return the reflected color scaled by reflectance and albedo
+    // Return the reflected color scaled by reflectance and albedo (color) to get a reflectiance level with the color of the mirror as well
     return reflected_color * reflectance * albedo + albedo * (1.0f - reflectance);
 }
