@@ -91,3 +91,10 @@ add_executable(test_MirrorShader
 target_link_libraries(test_MirrorShader cs4212-util)
 target_link_libraries(test_MirrorShader PNG::PNG)
 target_link_libraries(test_MirrorShader ZLIB::ZLIB)
+
+add_executable(test_graphicsArguments
+  test_graphicsArgs.cpp
+)
+target_link_libraries(test_graphicsArguments cs4212-util)
+target_link_libraries(test_graphicsArguments PNG::PNG)
+target_link_libraries(test_graphicsArguments ZLIB::ZLIB)

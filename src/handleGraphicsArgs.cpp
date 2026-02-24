@@ -28,13 +28,17 @@ GraphicsArgs::GraphicsArgs()
   : verbose(false),
     windowWidth( default_WindowSize ), windowHeight( default_WindowSize ),
     width( default_WindowSize ), height( default_WindowSize ), 
-    aspectRatio(1.0), useShadow(true), bgColor(0.0, 0.0, 0.0),
+    aspectRatio(1.0), useShadow(true),
     useDepthOfField(false),
     depthOfFieldDistance(0),
     numCpus(1), rpp(1), 
     recursionDepth(4),
     splitMethod("objectMedian")
 {
+  bgColor[0] = 0.0f;
+  bgColor[1] = 0.0f;
+  bgColor[2] = 0.0f;
+
   reg("help", "help/usage information", ArgumentParsing::NONE, '?');
   reg("verbose", "turn on verbose output", ArgumentParsing::NONE, 'v');
   reg("inputfile", "input file name to use", ArgumentParsing::STRING, 'i');
