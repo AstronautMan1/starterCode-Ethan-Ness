@@ -27,6 +27,7 @@ class LambertianShader : public shader{
 
     private:
 
+        int indirectSamples;
         
         vec3 albedo; // base color which is a vec3
 

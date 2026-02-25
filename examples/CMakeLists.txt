@@ -98,3 +98,10 @@ add_executable(test_graphicsArguments
 target_link_libraries(test_graphicsArguments cs4212-util)
 target_link_libraries(test_graphicsArguments PNG::PNG)
 target_link_libraries(test_graphicsArguments ZLIB::ZLIB)
+
+add_executable(test_diffuseInter
+  test_diffuseInter.cpp
+)
+target_link_libraries(test_diffuseInter cs4212-util)
+target_link_libraries(test_diffuseInter PNG::PNG)
+target_link_libraries(test_diffuseInter ZLIB::ZLIB)

@@ -15,6 +15,7 @@
 */
 #include <cmath> // cmath library
 #include <iostream> // iostream library
+#include <random> // random library
 
 /// @brief This is the vec3 class which handles things like postioning of cameras, rays, and even color values
 ///        This class also handles vector methods like * , / , + , - , dot , and cross. It also has methods for unit vectoring
@@ -113,4 +114,19 @@ inline vec3 unit_vector(const vec3& v) {
 
 inline vec3 reflect(const vec3& v, const vec3& n) {
     return v - 2 * dot(v, n) * n;
+}
+
+inline float randomFloat() {
+    static std::uniform_real_distribution<float> distribution(0.0f,1.0f);
+    static std::mt19937 generator(std::random_device{}());
+    return distribution(generator);
+}
+
+inline vec3 random_unit_vector(){
+    while(true) {
+        vec3 randPoint = vec3(randomFloat(), randomFloat(), randomFloat());
+        if (randPoint.length_squared() < 1){
+            return unit_vector(randPoint);
+        }
+    }
 }

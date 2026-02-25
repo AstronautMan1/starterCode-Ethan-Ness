@@ -1,7 +1,7 @@
 /*
     @author Ethan Ness
 
-    Mirror shade tester which tests the new mirror shader
+    Diffuse Shader testing inter Diffuse Shading and hard shadows
 */
 
 /*
@@ -26,17 +26,17 @@ float randomOffset() {
     return distribution(generator);
 }
 
-/// @brief Create an image with mirror reflection using depth-based recursion
-void MirrorShaderTest(){
+/// @brief Create an image with diffuse shading for inter diffuse shading and hard shadows
+void interDiffuse(){
 
-    Framebuffer fb(900,600); // framebuffer creation
+    Framebuffer fb(1920, 1080); // framebuffer creation
     float aspectRatio = static_cast<float>(fb.getWidth()) / static_cast<float>(fb.getHeight()); // set up aspect ratio 
 
     vec3 position(0, 1, 4); // position of camera
     vec3 U(1,0,0); // x axis direction camera is looking
     vec3 V(0,1,0); // y axis direction camera is looking
     vec3 W(0,0,3); // z axis direction camera is looking
-    float focal = 0.3f; // focal size
+    float focal = 0.2f; // focal size
     float planeHeight = 0.5f; // plane height
     float planeWidth = planeHeight * aspectRatio; // plane width
     float tmin = 0.001f; // initialize tmin
@@ -51,25 +51,23 @@ void MirrorShaderTest(){
 
     // Create a red Blinn Phong sphere
     auto RedShade = std::make_shared<BlinnPhongShader>(vec3(1.0, 0.2, 0.2), 32.0f, 0.5f); // red Blinn Phong Shader
-    std::shared_ptr<Shape> redSphere = std::make_shared<Sphere>(point3(-1.2f, 1.0, -3.0f), 1.0f, RedShade); // make shared pointer of shape sphere with the red blinn phong shader
+    std::shared_ptr<Shape> redSphere = std::make_shared<Sphere>(point3(-1.0f, 0.5, -3.0f), 1.0f, RedShade); // make shared pointer of shape sphere with the red blinn phong shader
     scene.add(redSphere); // add the red sphere to hit list scene
 
     // Create a perfect mirror shader sphere
-    auto mirrorShade = std::make_shared<MirrorShader>(vec3(1.0,1.0,1.0), 1.0f); // mirror shader with a color of white and a 1.0 intensity perfect mirror
-    std::shared_ptr<Shape> mirrorSphere = std::make_shared<Sphere>(point3(1.2f, 1.1, -4.0f), 1.1f, mirrorShade); // a mirror sphere with the mirror shader
-    scene.add(mirrorSphere); // add mirror sphere
+    auto BlueShade = std::make_shared<BlinnPhongShader>(vec3(0.2,0.2,1.0), 32.0f, 0.5f); // Blue Blinn phong shader
+    std::shared_ptr<Shape> blueSphere = std::make_shared<Sphere>(point3(1.0f, 0.5, -3.0f), 1.0f, BlueShade); // a blue sphere 
+    scene.add(blueSphere); // add blue sphere
 
     // Create a ground plane just a sphere that is green
-    auto GroundShade = std::make_shared<LambertianShader>(vec3(0.2, 1.0, 0.2)); // lambertian green shader for ground
+    auto GroundShade = std::make_shared<LambertianShader>(vec3(0.3, 1.0, 0.3)); // lambertian green shader for ground
     std::shared_ptr<Shape> ground = std::make_shared<Sphere>(point3(0, -100.5f, -1.0f), 100.0f, GroundShade); // green ground sphere
     scene.add(ground); // add the sphere to the hitlist
 
-    /*
-    // creating a sky plane which is also just a sphere and is blue
-    auto SkyShade = std::make_shared<LambertianShader>(vec3(0.4,0.4,1.0)); // blue lambertian shader for sky
-    std::shared_ptr<Shape> sky = std::make_shared<Sphere>(point3(0,80.5f,-3.0f), 90.0f, SkyShade); // blue sphere for sky
-    scene.add(sky); // add sky sphere
-    */
+    // Create a Wall plane for a wall
+    auto WallShade = std::make_shared<LambertianShader>(vec3(0.7,0.7,0.7)); // grey lambertian shader
+    std::shared_ptr<Shape> wall = std::make_shared<Sphere>(point3(0,0,-15), 10.0f, WallShade); // a sphere with wall shade for a wall
+    scene.add(wall); // add the wall to the scene hitlist
 
     // for loop going through pixels
     for (int x = 0; x < fb.getWidth(); ++x){
@@ -89,8 +87,8 @@ void MirrorShaderTest(){
 
                     pc.generateRay(x + pOffset, y + qOffset, r); // generate ray with p and q offset
 
-                    // Use max depth of 5 for mirror recursion and background color of black (blue sphere and green sphere handle background already)
-                    color += scene.computeRayColor(r, tmin, tmax, mainlight, vec3(0.5,0.7,1.0), 15);
+                    // Use max depth of 10 for diffuse recursion and background color of black 
+                    color += scene.computeRayColor(r, tmin, tmax, mainlight, vec3(0,0,0), 10);
                 }
             }
 
@@ -100,13 +98,13 @@ void MirrorShaderTest(){
         }
     }
 
-    fb.exportToPNG("MirrorShaderTest.png"); // png image output
+    fb.exportToPNG("interDiffuse.png"); // png image output
 }
 
 /// @brief The main function that calls MirrorShaderTest function
 /// @return just returns 0
 int main(){
 
-    MirrorShaderTest();
+    interDiffuse();
     return 0;
 }
