@@ -17,7 +17,7 @@
 /// @param scene the hit list for recursive ray tracing
 /// @param depth the recursion depth - controls how many reflections to trace
 /// @return we return a vec3 which is the color of the reflected rays
-vec3 MirrorShader::rayColor(const ray &r, const hit_record &rec, const Light &light, hitList &scene, int depth) const {
+vec3 MirrorShader::rayColor(const ray &r, const hit_record &rec, const Light &light, hitList &scene, int depth, vec3 &bgcolor) const {
 
     if (depth <= 0) {
         return vec3(0.0f, 0.0f, 0.0f); // stop recursion if depth is 0
@@ -35,7 +35,7 @@ vec3 MirrorShader::rayColor(const ray &r, const hit_record &rec, const Light &li
     float tmax = std::numeric_limits<float>::infinity(); // maximum t value to infinity
 
     // Recursively trace the reflected ray and blend with reflectance
-    vec3 reflected_color = scene.computeRayColor(reflected_ray, tmin, tmax, light, vec3(0.0f, 0.0f, 0.0f), depth - 1);
+    vec3 reflected_color = scene.computeRayColor(reflected_ray, tmin, tmax, light, bgcolor, depth - 1);
 
     // Return the reflected color scaled by reflectance and albedo (color) to get a reflectiance level with the color of the mirror as well
     return reflected_color * reflectance * albedo + albedo * (1.0f - reflectance);

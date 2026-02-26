@@ -16,6 +16,7 @@
 #include "LambertianShader.h" // lambertian shader class
 #include "BlinnPhongShader.h" // blinn phong shader class
 #include "Light.h" // light class
+#include "handleGraphicsArgs.h" // graphics argument handling
 #include <random> // random library
 
 /// @brief this is the random offset for MSAA anti aliasing
@@ -27,10 +28,15 @@ float randomOffset() {
 }
 
 /// @brief Create an image with diffuse shading for inter diffuse shading and hard shadows
-void interDiffuse(){
+void interDiffuse(int argc, char *argv[]){
 
-    Framebuffer fb(1920, 1080); // framebuffer creation
-    float aspectRatio = static_cast<float>(fb.getWidth()) / static_cast<float>(fb.getHeight()); // set up aspect ratio 
+    sivelab::GraphicsArgs arguments;
+    arguments.process(argc, argv);
+
+    Framebuffer fb(arguments.width, arguments.height); // framebuffer creation
+    float aspectRatio = arguments.aspectRatio;
+    std::string outputNameFile = arguments.outputFileName;
+    int depth = arguments.recursionDepth;
 
     vec3 position(0, 1, 4); // position of camera
     vec3 U(1,0,0); // x axis direction camera is looking
@@ -40,13 +46,13 @@ void interDiffuse(){
     float planeHeight = 0.5f; // plane height
     float planeWidth = planeHeight * aspectRatio; // plane width
     float tmin = 0.001f; // initialize tmin
-    int rpp_NSquare = 4; // rpp NSquare - 4x4 antialiasing
+    int rpp_NSquare = arguments.rpp; // rpp NSquare - 4x4 antialiasing
 
     PerspectiveCamera pc(position, U, V, W, focal, planeWidth, planeHeight, fb.getWidth(), fb.getHeight()); // make the persepective camera
 
     hitList scene; // make the hitlist for objects
 
-    Light mainlight(point3(2, 2, 0), vec3(1, 1, 1)); // light object at position 5,5,5 with white light color
+    Light mainlight(point3(5, 5, 5), vec3(1, 1, 1)); // light object at position 5,5,5 with white light color
 
 
     // Create a red Blinn Phong sphere
@@ -70,8 +76,8 @@ void interDiffuse(){
     scene.add(wall); // add the wall to the scene hitlist
 
     // for loop going through pixels
-    for (int x = 0; x < fb.getWidth(); ++x){
-        for(int y = 0; y < fb.getHeight(); ++y){ 
+    for (int y = 0; y < fb.getHeight(); ++y){
+        for(int x = 0; x < fb.getWidth(); ++x){ 
 
             vec3 color(0.0, 0.0, 0.0); // reset color
 
@@ -88,7 +94,7 @@ void interDiffuse(){
                     pc.generateRay(x + pOffset, y + qOffset, r); // generate ray with p and q offset
 
                     // Use max depth of 10 for diffuse recursion and background color of black 
-                    color += scene.computeRayColor(r, tmin, tmax, mainlight, vec3(0,0,0), 10);
+                    color += scene.computeRayColor(r, tmin, tmax, mainlight, vec3(0,0,0), depth);
                 }
             }
 
@@ -98,13 +104,13 @@ void interDiffuse(){
         }
     }
 
-    fb.exportToPNG("interDiffuse.png"); // png image output
+    fb.exportToPNG(arguments.outputFileName); // png image output
 }
 
 /// @brief The main function that calls MirrorShaderTest function
 /// @return just returns 0
-int main(){
+int main(int argc, char *argv[]){
 
-    interDiffuse();
+    interDiffuse(argc, argv);
     return 0;
 }

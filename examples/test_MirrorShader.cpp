@@ -16,6 +16,7 @@
 #include "LambertianShader.h" // lambertian shader class
 #include "BlinnPhongShader.h" // blinn phong shader class
 #include "Light.h" // light class
+#include "handleGraphicsArgs.h" // graphics handling
 #include <random> // random library
 
 /// @brief this is the random offset for MSAA anti aliasing
@@ -27,10 +28,15 @@ float randomOffset() {
 }
 
 /// @brief Create an image with mirror reflection using depth-based recursion
-void MirrorShaderTest(){
+void MirrorShaderTest(int argc, char *argv[]){
 
-    Framebuffer fb(900,600); // framebuffer creation
-    float aspectRatio = static_cast<float>(fb.getWidth()) / static_cast<float>(fb.getHeight()); // set up aspect ratio 
+    sivelab::GraphicsArgs arguments;
+    arguments.process(argc, argv);
+
+    Framebuffer fb(arguments.width, arguments.height); // framebuffer creation
+    float aspectRatio = arguments.aspectRatio;
+    std::string outputNameFile = arguments.outputFileName;
+    int depth = arguments.recursionDepth;
 
     vec3 position(0, 1, 4); // position of camera
     vec3 U(1,0,0); // x axis direction camera is looking
@@ -40,7 +46,7 @@ void MirrorShaderTest(){
     float planeHeight = 0.5f; // plane height
     float planeWidth = planeHeight * aspectRatio; // plane width
     float tmin = 0.001f; // initialize tmin
-    int rpp_NSquare = 4; // rpp NSquare - 4x4 antialiasing
+    int rpp_NSquare = arguments.rpp; // rpp NSquare - 4x4 antialiasing
 
     PerspectiveCamera pc(position, U, V, W, focal, planeWidth, planeHeight, fb.getWidth(), fb.getHeight()); // make the persepective camera
 
@@ -90,7 +96,7 @@ void MirrorShaderTest(){
                     pc.generateRay(x + pOffset, y + qOffset, r); // generate ray with p and q offset
 
                     // Use max depth of 5 for mirror recursion and background color of black (blue sphere and green sphere handle background already)
-                    color += scene.computeRayColor(r, tmin, tmax, mainlight, vec3(0.5,0.7,1.0), 15);
+                    color += scene.computeRayColor(r, tmin, tmax, mainlight, vec3(0.5,0.7,1.0), depth);
                 }
             }
 
@@ -100,13 +106,13 @@ void MirrorShaderTest(){
         }
     }
 
-    fb.exportToPNG("MirrorShaderTest.png"); // png image output
+    fb.exportToPNG(arguments.outputFileName); // png image output
 }
 
 /// @brief The main function that calls MirrorShaderTest function
 /// @return just returns 0
-int main(){
+int main(int argc, char *argv[]){
 
-    MirrorShaderTest();
+    MirrorShaderTest(argc, argv);
     return 0;
 }

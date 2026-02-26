@@ -17,7 +17,7 @@
 /// @param scene the hit list for recursive ray tracing
 /// @param depth the recursion depth for ray tracing reflections (not used here just needed for interface override compliance)
 /// @return we return a vec3 which is the color of that pixel
-vec3 LambertianShader::rayColor(const ray &r, const hit_record &rec, const Light &light, hitList &scene, int depth) const {
+vec3 LambertianShader::rayColor(const ray &r, const hit_record &rec, const Light &light, hitList &scene, int depth, vec3 &bgcolor) const {
 
     if (depth <= 0){ // if depth is equal or less then 0 we return black
         return vec3(0,0,0);
@@ -49,7 +49,7 @@ vec3 LambertianShader::rayColor(const ray &r, const hit_record &rec, const Light
     vec3 bounce_direction = normal + random_unit_vector(); // bounce direction for scattered ray is normal + random unit vector
     ray scattered_ray(rec.getPoint() + (normal * 0.001f), bounce_direction); // scattered ray setup
 
-    vec3 indirectLight = scene.computeRayColor(scattered_ray, tmin, tmax, light, vec3(0,0,0), depth - 1); // recursive call for indirect lighting
+    vec3 indirectLight = scene.computeRayColor(scattered_ray, tmin, tmax, light, bgcolor, depth - 1); // recursive call for indirect lighting
 
     return albedo * (directLighting + indirectLight); // return albedo * (directLighting + indirectLight)
 }

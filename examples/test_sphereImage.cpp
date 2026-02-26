@@ -15,14 +15,20 @@
 #include "PerspectiveCamera.h" // Perspective Camera
 #include "Shape.h" // shape class
 #include "Sphere.h" // sphere class
+#include "handleGraphicsArgs.h"
 #include <iostream> // iostream library
 
 
 /// @brief This is the function that handles the making of a framebuffer and making a camera and a sphere than creating the image into a png
-void sphereimage(){
+void sphereimage(int argc, char *argv[]){
 
-    Framebuffer fb(500,500); // framebuffer creation
-    float aspectRatio = static_cast<float>(fb.getWidth()) / static_cast<float>(fb.getHeight()); // set up aspect ratio calculation
+    sivelab::GraphicsArgs arguments;
+    arguments.process(argc, argv);
+
+    Framebuffer fb(arguments.width, arguments.height); // framebuffer creation
+    float aspectRatio = arguments.aspectRatio;
+    std::string outputNameFile = arguments.outputFileName;
+    int depth = arguments.recursionDepth;
 
     vec3 position(0,0,-1); // position of camera
     vec3 U(1,0,0); // x axis direction camera is looking
@@ -57,16 +63,16 @@ void sphereimage(){
         }
     }
 
-    fb.exportToPNG("test_sphereimage.png"); // export to a png file
+    fb.exportToPNG(arguments.outputFileName); // export to a png file
 
 }
 
 
 /// @brief the main function to run the sphere image function
 /// @return just returns 0
-int main(){
+int main(int argc, char *argv[]){
 
-    sphereimage();
+    sphereimage(argc, argv);
 
     return 0;
 

@@ -18,7 +18,7 @@
 /// @param scene the hit list for recursive ray tracing for reflections
 /// @param depth the recursion depth for ray tracing reflections
 /// @return we return the ambient + diffuse + specular
-vec3 BlinnPhongShader::rayColor(const ray &r, const hit_record &rec, const Light &light, hitList &scene, int depth) const {
+vec3 BlinnPhongShader::rayColor(const ray &r, const hit_record &rec, const Light &light, hitList &scene, int depth, vec3 &bgcolor) const {
 
     // if depth is less then or equal to 0 we return black
     if (depth <= 0){
@@ -59,7 +59,7 @@ vec3 BlinnPhongShader::rayColor(const ray &r, const hit_record &rec, const Light
     vec3 bounceDirection = normal + random_unit_vector(); // get the direction of the bounce
     ray scattered_ray(rec.getPoint() + (normal * 0.001f), bounceDirection); // scattered ray
 
-    vec3 indirectDiffuse = scene.computeRayColor(scattered_ray, tmin, tmax, light, vec3(0,0,0), depth - 1); // indirect diffuse is the recursion of compute ray color with depth - 1
+    vec3 indirectDiffuse = scene.computeRayColor(scattered_ray, tmin, tmax, light, bgcolor, depth - 1); // indirect diffuse is the recursion of compute ray color with depth - 1
 
     return (albedo * indirectDiffuse) + diffuse + specular; // return the albedo * indirectDiffuse + diffuse + specular
 

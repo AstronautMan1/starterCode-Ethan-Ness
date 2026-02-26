@@ -1,4 +1,14 @@
-This project uses CMake and vcpkg for managing C++ dependencies. It serves as a simple example to test your build setup before we get into more complicted code.
+## Ethan Ness CS 5212 Computer Graphics Code
+
+This my code for CS 5212 Computer graphics. All of my test files are in the build/examples/debug directory. Inside there are multiple test files for my graphics code for lambertian, blinnphong, mirrors, and diffuse inter reflection. The test files also incorporate graphics handling arguments in the command line. So when you build the code in debug preset go to /build/examples/debug and run the files and run them by passing in the graphics arguments handling commands (-w for width). 
+
+Here is an example:
+```
+cmake --preset=default
+cd buildVCPkg/examples/debug
+
+.\test_diffuseInter.exe -w 1920 -h 1080 -r 4 -k 20 -o "interDiffuse.png"
+```
 
 ## Building Using CMake Presets
 

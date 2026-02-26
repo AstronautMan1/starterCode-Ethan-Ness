@@ -14,6 +14,7 @@
 #include "triangle.h" // triangle class
 #include "LambertianShader.h" // lambertianShader Class
 #include "Light.h" // light class
+#include "handleGraphicsArgs.h" // graphics argument handling
 #include <random> // random library
 
 /// @brief This is a random offset funtion which gives a random offset for our pixels for anti aliasing generation
@@ -27,11 +28,17 @@ float randomOffset() {
 
 
 /// @brief This is the lambert shader image maker function which makes the image with anti aliasing
-void LambertianAntiAliasing(){
+void LambertianAntiAliasing(int argc, char *argv[]){
 
-    Framebuffer fb(900,600); // framebuffer creation
+    sivelab::GraphicsArgs arguments;
+    arguments.process(argc, argv);
+
+    Framebuffer fb(arguments.width, arguments.height); // framebuffer creation
+    float aspectRatio = arguments.aspectRatio;
+    std::string outputNameFile = arguments.outputFileName;
+    int depth = arguments.recursionDepth;
     hitList listOfObjects; // list of objects
-    float aspectRatio = static_cast<float>(fb.getWidth()) / static_cast<float>(fb.getHeight()); // set up aspect ratio calculation
+
 
     vec3 position(0,0,5); // position of camera
     vec3 U(1,0,0); // x axis direction camera is looking
@@ -41,7 +48,7 @@ void LambertianAntiAliasing(){
     float planeHeight = 0.5f; // plane height
     float planeWidth = planeHeight * aspectRatio; // plane width
     float tmin = 0.001f; // initialize tmin
-    int rpp_NSquare = 4; // rpp NSquare breaking pixel into 4x4 subsections
+    int rpp_NSquare = arguments.rpp; // rpp NSquare breaking pixel into 4x4 subsections
 
     PerspectiveCamera pc(position, U, V, W, focal, planeWidth, planeHeight, fb.getWidth(), fb.getHeight()); // making the perspective camera
 
@@ -72,7 +79,7 @@ void LambertianAntiAliasing(){
 
                     pc.generateRay(x+p, y+q, r); // generate a ray with p adn q offset added to the pixel
 
-                    color += scene.computeRayColor(r, tmin, tmax, mainlight, vec3(0.5,0.5,0.5), 5); // compute the ray color with that anti aliasing
+                    color += scene.computeRayColor(r, tmin, tmax, mainlight, vec3(0.5,0.5,0.5), depth); // compute the ray color with that anti aliasing
                 }
             }
 
@@ -83,13 +90,13 @@ void LambertianAntiAliasing(){
     }
 
 
-    fb.exportToPNG("LambertianAntiAliasingTest.png"); // png image output of shaderlambert with anti aliasing
+    fb.exportToPNG(arguments.outputFileName); // png image output of shaderlambert with anti aliasing
 }
 
 /// @brief The main function that calls LambertShadeImage function
 /// @return just returns 0
-int main(){
+int main(int argc, char *argv[]){
 
-    LambertianAntiAliasing();
+    LambertianAntiAliasing(argc, argv);
     return 0;
 }
