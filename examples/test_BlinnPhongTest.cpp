@@ -42,7 +42,7 @@ void BlinnPhongShadeImage(int argc, char *argv[]){
 
     hitList scene; // make the hitlist for objects
 
-    Light mainlight(point3(5,5,5), vec3(1,1,1)); // light object at a position of 5,5,5 (x,y,z) and an intensity of 1,1,1 (white light)
+    Light mainlight(point3(1,0,-1), vec3(1,1,1)); // light object at a position of 5,5,5 (x,y,z) and an intensity of 1,1,1 (white light)
 
     auto GreenShade = std::make_shared<BlinnPhongShader>(vec3(0.2,1.0,0.2), 150.0f, 0.6f); // LambertianShader blueshade it is a blue shader of Lambertian
 
@@ -69,7 +69,7 @@ void BlinnPhongShadeImage(int argc, char *argv[]){
     }
 
 
-    fb.exportToPNG("ShaderBlinnPhongTest.png"); // png image output of shaderlambert
+    fb.exportToPNG(arguments.outputFileName); // png image output of shaderlambert
 }
 
 /// @brief The main function that calls LambertShadeImage function
