@@ -5,6 +5,9 @@ This my code for CS 5212 Computer graphics. All of my test files are in the buil
 Here is an example:
 ```
 cmake --preset=default
+cd buildVCPkg
+cmake --build .
+
 cd buildVCPkg/examples/debug
 
 .\test_diffuseInter.exe -w 1920 -h 1080 -r 4 -k 20 -o "interDiffuse.png"
