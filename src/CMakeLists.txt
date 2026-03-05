@@ -15,6 +15,10 @@ add_library (cs4212-util
   Shader.h
   BlinnPhongShader.h BlinnPhongShader.cpp
   MirrorShader.h MirrorShader.cpp
+  ISceneLoader.h
+  SceneContainer.h
+  SceneLoader.h
+  SceneParser_JSON.h SceneParser_JSON.cpp
 )
 
 

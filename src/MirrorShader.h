@@ -17,7 +17,7 @@ class hitList; // forward declaration to avoid double inclusion
 class MirrorShader : public shader {
 
     public:
-
+    
     MirrorShader(const vec3& Passcolor, float Passreflectance) : reflectance(Passreflectance), albedo(Passcolor) {} // mirrorshader constructor
 
     virtual vec3 rayColor(const ray &r, const hit_record &rec, const Light &light, hitList &scene, int depth, vec3 &bgcolor) const override; // rayColor function which it inherited from shader

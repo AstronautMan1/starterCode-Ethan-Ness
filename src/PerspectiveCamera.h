@@ -20,18 +20,18 @@ class PerspectiveCamera : public Camera {
 
         PerspectiveCamera(vec3 position, vec3 valueU, vec3 valueV, vec3 valueW, float focal, float planeWidth, float planeLength, int imageWidth, int imageHeight) 
         : pos(position), U(valueU), V(valueV), W(valueW), focalLength(focal), imagePlane_Width(planeWidth), imagePlane_Length(planeLength), nx(imageWidth), ny(imageHeight) {
-            leftBound = -planeWidth / 2.0f;
-            rightBound = planeWidth / 2.0f;
-            bottomBound = -planeLength / 2.0f;
-            topBound = planeLength / 2.0f;
+            //leftBound = -planeWidth / 2.0f;
+            //rightBound = planeWidth / 2.0f;
+            //bottomBound = -planeLength / 2.0f;
+            //topBound = planeLength / 2.0f;
+            updateBounds();
         } // pass in constructor
 
         void generateRay(float i, float j, ray &r) override; // generate ray override
 
-        void setNX(int width) {nx = width;} // set the width
+        void setNX(int width) {nx = width; updateBounds();} // set the width
 
-        void setNY(int height) {ny = height;} // set the height
-
+        void setNY(int height) {ny = height; updateBounds();} // set the height
 
     private:
 
@@ -50,4 +50,15 @@ class PerspectiveCamera : public Camera {
         int ny;  // y size of the image
 
         float leftBound, rightBound, bottomBound, topBound;  // the left, right, top, and bottom bound of the frame buffer
+
+        void updateBounds() {
+            float aspect = (float)nx / (float)ny;
+
+            imagePlane_Length = imagePlane_Width / aspect;
+
+            leftBound = -imagePlane_Width / 2.0f;
+            rightBound = imagePlane_Width / 2.0f;
+            bottomBound = -imagePlane_Length / 2.0f;
+            topBound = imagePlane_Length / 2.0f;
+        }
 };

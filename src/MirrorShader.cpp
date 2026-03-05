@@ -20,7 +20,7 @@
 vec3 MirrorShader::rayColor(const ray &r, const hit_record &rec, const Light &light, hitList &scene, int depth, vec3 &bgcolor) const {
 
     if (depth <= 0) {
-        return vec3(0.0f, 0.0f, 0.0f); // stop recursion if depth is 0
+        return bgcolor; // stop recursion if depth is 0
     }
 
     // Calculate the reflected ray direction

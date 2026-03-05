@@ -44,7 +44,7 @@ void LambertShadeImage(int argc, char *argv[]){
 
     hitList scene; // make the hitlist for objects
 
-    Light mainlight(point3(5,5,5), vec3(1,1,1)); // light object at a position of 5,5,5 (x,y,z) and an intensity of 1,1,1 (white light)
+    Light mainlight(point3(5,5,5), vec3(1,1,1), "point light"); // light object at a position of 5,5,5 (x,y,z) and an intensity of 1,1,1 (white light)
 
     auto BlueShade = std::make_shared<LambertianShader>(vec3(0.2,0.2,1.0)); // LambertianShader blueshade it is a blue shader of Lambertian
 

@@ -17,9 +17,9 @@ void PerspectiveCamera::generateRay (float i, float j, ray &R){
 
     R.setOrigin(pos); // set the origin of the ray with the position of the camera
 
-    float u = leftBound + (rightBound - leftBound) * (i + 0.5f) / (float)nx; // calculate little u
+    float u = leftBound + (rightBound - leftBound) * (i) / (float)nx; // calculate little u
 
-    float v = topBound + (bottomBound - topBound) * (j + 0.5f) / (float)ny; // calculate little v
+    float v = topBound + (bottomBound - topBound) * (j) / (float)ny; // calculate little v
 
     vec3 direction = -W * focalLength + u * U + v * V; // one thing to note here is that the positive w is flipped to negative to go down the negative Z axis
 

@@ -52,7 +52,7 @@ void interDiffuse(int argc, char *argv[]){
 
     hitList scene; // make the hitlist for objects
 
-    Light mainlight(point3(5, 5, 5), vec3(1, 1, 1)); // light object at position 5,5,5 with white light color
+    Light mainlight(point3(5, 5, 5), vec3(1, 1, 1), "pointlight"); // light object at position 5,5,5 with white light color
 
 
     // Create a red Blinn Phong sphere

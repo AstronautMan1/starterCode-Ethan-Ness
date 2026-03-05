@@ -105,3 +105,10 @@ add_executable(test_diffuseInter
 target_link_libraries(test_diffuseInter cs4212-util)
 target_link_libraries(test_diffuseInter PNG::PNG)
 target_link_libraries(test_diffuseInter ZLIB::ZLIB)
+
+add_executable(test_sceneloader
+  test_sceneloader.cpp
+)
+target_link_libraries(test_sceneloader cs4212-util)
+target_link_libraries(test_sceneloader PNG::PNG)
+target_link_libraries(test_sceneloader ZLIB::ZLIB)
