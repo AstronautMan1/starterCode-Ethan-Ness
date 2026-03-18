@@ -75,9 +75,11 @@ void interDiffuse(int argc, char *argv[]){
     std::shared_ptr<Shape> wall = std::make_shared<Sphere>(point3(0,0,-15), 10.0f, WallShade); // a sphere with wall shade for a wall
     scene.add(wall); // add the wall to the scene hitlist
 
+
+     #pragma omp parallel for
     // for loop going through pixels
-    for (int y = 0; y < fb.getHeight(); ++y){
-        for(int x = 0; x < fb.getWidth(); ++x){ 
+    for (int x = 0; x < fb.getWidth(); ++x){
+        for(int y = 0; y < fb.getHeight(); ++y){ 
 
             vec3 color(0.0, 0.0, 0.0); // reset color
 
