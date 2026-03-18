@@ -61,7 +61,7 @@ int main(void)
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
-    glClearColor(0.0, 0.7, 1.0, 1.0);
+    glClearColor(0.0, 0.0, 1.0, 1.0); //RGB and Alpha which is opaque 
 
     int fb_width, fb_height;
     glfwGetFramebufferSize(window, &fb_width, &fb_height);
@@ -81,6 +81,70 @@ int main(void)
 
     double timeDiff = 0.0, startFrameTime = 0.0, endFrameTime = 0.0;
     
+    // get it on the GPU 
+    // load scene file
+    // get the shapes in the scene
+
+    // load triangle
+    // create a vertex array buffer to hold our triangle data
+
+    // Scene images 
+
+    /* VBO Vertex Buffer Object */
+
+    GLuint m_triangleVBO[1], m_VAO; // triangle int array using the GLuint basically integer
+    //sivelab::GLSLObject shader;
+
+    // create a Vertex Array Buffer to hold our triangle data                                               
+    glGenBuffers(1, m_triangleVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, m_triangleVBO[0]);
+
+// this is the actual triangle data that will be copied to                                              
+// the GPU memory                                                                                       
+    std::vector< float > host_VertexBuffer{ -0.25f, -0.25f, 0.0f,    // V0                                    
+                                            0.25f, -0.25f, 0.0f,    // V1                                    
+                                            0.0f, 0.25f, 0.0f };   // V2                                    
+
+    int numBytes = host_VertexBuffer.size() * sizeof(float); // buffer works in bytes so this calculates the bytes of the vector of triangles 
+
+    // buffer can only do one thing at a time
+    // copy the numBytes from host_VertexBuffer t the GPU and store in                                      
+    // the currently bound VBO                                                                              
+    glBufferData(GL_ARRAY_BUFFER, numBytes, host_VertexBuffer.data(), GL_STATIC_DRAW); // bind buffer
+    glBindBuffer(GL_ARRAY_BUFFER, 0); // unbind buffer
+
+    // once copied, we no longer need the data on the host                                                  
+    host_VertexBuffer.clear(); // clear the data from CPU or Host
+
+
+    /* VAO or Vertex Array Objects For the objects because the GPU doesn't know the VBO you gave it*/
+
+    // create a vertex array object that will map the attributes in                                         
+    // our vertex buffer to different location attributes for our                                           
+    // shaders                                                                                              
+    glGenVertexArrays(1, &m_VAO); // make VAO
+    glBindVertexArray(m_VAO); // bind VAO to say work on this one
+
+    // VAO details here - we only have 1 attribute or location                                              
+    // (Position of the vertex)                                                                             
+    glEnableVertexAttribArray(0); // enable attributes in this case 1
+    glBindBuffer(GL_ARRAY_BUFFER, m_triangleVBO[0]); // bind the VBO to the VAO
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0); // Sets the attributes
+    glBindVertexArray(0);
+
+    /* Shaders for triangle */
+
+    // Create a shader using my GLSLObject class                                                            
+    sivelab::GLSLObject shader; // make shader
+    shader.addShader( "vertexShader_passthrough.glsl", sivelab::GLSLObject::VERTEX_SHADER ); // add the vertex shader (gets the triangle on screen or moving stuff)
+    shader.addShader( "fragmentShader_passthrough.glsl", sivelab::GLSLObject::FRAGMENT_SHADER ); // add the fragment shader (this is for all pixels in triangle color them)
+    shader.createProgram(); // then compile and link them
+
+    /*We have to make a fragment and vertex shader in the build folder with names above*/
+
+
+    /*Render Triangle stage in while loop*/
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
@@ -93,6 +157,15 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         /* Render your objects here */
+        
+        /*Render Triangle stage in while loop*/
+        /* Render your objects here */
+        shader.activate(); // activate shader
+        glBindVertexArray(m_VAO); // bind the vertex array
+        glDrawArrays(GL_TRIANGLES, 0, 3); // draw the arrays of triangles
+        glBindVertexArray(0); // unbind
+        shader.deactivate(); // deactivate shader
+    
 
         // Swap the front and back buffers
         glfwSwapBuffers(window);
