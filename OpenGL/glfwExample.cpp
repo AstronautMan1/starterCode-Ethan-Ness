@@ -61,7 +61,7 @@ int main(void)
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
-    glClearColor(0.0, 0.0, 1.0, 1.0); //RGB and Alpha which is opaque 
+    glClearColor(0.5, 0.5, 0.5, 1.0); //RGB and Alpha which is opaque 
 
     int fb_width, fb_height;
     glfwGetFramebufferSize(window, &fb_width, &fb_height);
@@ -101,9 +101,11 @@ int main(void)
 
 // this is the actual triangle data that will be copied to                                              
 // the GPU memory                                                                                       
-    std::vector< float > host_VertexBuffer{ -0.25f, -0.25f, 0.0f,    // V0                                    
-                                            0.25f, -0.25f, 0.0f,    // V1                                    
-                                            0.0f, 0.25f, 0.0f };   // V2                                    
+    std::vector< float > host_VertexBuffer
+    {   -0.25f, -0.25f, 0.0f, 1.0f, 0.0f, 0.0f,   // V0                                    
+        0.25f, -0.25f, 0.0f, 0.0f, 1.0f, 0.0f,    // V1                                    
+        0.0f, 0.25f, 0.0f, 0.0f, 0.0f, 1.0f     // V2 
+    };                                  
 
     int numBytes = host_VertexBuffer.size() * sizeof(float); // buffer works in bytes so this calculates the bytes of the vector of triangles 
 
@@ -129,7 +131,9 @@ int main(void)
     // (Position of the vertex)                                                                             
     glEnableVertexAttribArray(0); // enable attributes in this case 1
     glBindBuffer(GL_ARRAY_BUFFER, m_triangleVBO[0]); // bind the VBO to the VAO
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0); // Sets the attributes
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)0); // Sets the attributes
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1,3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*) (3 * sizeof(float)));
     glBindVertexArray(0);
 
     /* Shaders for triangle */
