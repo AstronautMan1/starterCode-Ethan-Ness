@@ -71,15 +71,37 @@ int main(void)
     // by the window frame.
     //
     // The ortho parameters, in order: left, right, bottom, top, zNear, zFar
+    //float halfWidth = 15.0 / 2.0;
+    //float halfHeight = halfWidth / aspectRatio;
+    //glm::mat4 projectionMatrix = glm::ortho(-halfWidth, halfWidth, -halfHeight, halfHeight, -10.0f, 10.0f);
+
+    // The ortho parameters, in order: left, right, bottom, top, zNear, zFar for the ortho matrix
     float halfWidth = 15.0 / 2.0;
-    float halfHeight = halfWidth / aspectRatio;
-    glm::mat4 projectionMatrix = glm::ortho(-halfWidth, halfWidth, -halfHeight, halfHeight, -10.0f, 10.0f);
+    float halfHeight = halfWidth;
+
+    float left = -halfWidth;
+    float right = halfWidth;
+
+    float bottom = -halfHeight;
+    float top = halfHeight;
+
+    float near = 5.0f;
+    float far = -5.0f;
+
+    glm::mat4 M_ortho = glm::ortho(-halfWidth, halfWidth, -halfHeight, halfHeight, near, far);
+
+    glm::vec3 m_pos(0,0,0), m_viewDir(0,0,-1);
+    glm::vec3 m_U(1,0,0), m_V(0,1,0), m_W(0,0,1);
+
+    double timeDiff = 0.0, startFrameTime = 0.0, endFrameTime = 0.0;
+
+
 
     GLint major_version;
     glGetIntegerv(GL_MAJOR_VERSION, &major_version);
     std::cout << "GL_MAJOR_VERSION: " << major_version << std::endl;
 
-    double timeDiff = 0.0, startFrameTime = 0.0, endFrameTime = 0.0;
+    //double timeDiff = 0.0, startFrameTime = 0.0, endFrameTime = 0.0;
     
     // get it on the GPU 
     // load scene file
@@ -102,10 +124,11 @@ int main(void)
 // this is the actual triangle data that will be copied to                                              
 // the GPU memory                                                                                       
     std::vector< float > host_VertexBuffer
-    {   -0.25f, -0.25f, 0.0f, 1.0f, 0.0f, 0.0f,   // V0                                    
-        0.25f, -0.25f, 0.0f, 0.0f, 1.0f, 0.0f,    // V1                                    
-        0.0f, 0.25f, 0.0f, 0.0f, 0.0f, 1.0f     // V2 
-    };                                  
+    {   -3.0f, -3.0f, 0.0f, 1.0f, 0.0f, 0.0f,   // V0                                    
+        3.0f, -3.0f, 0.0f, 0.0f, 1.0f, 0.0f,    // V1                                    
+        0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 1.0f     // V2 
+    };       
+                 
 
     int numBytes = host_VertexBuffer.size() * sizeof(float); // buffer works in bytes so this calculates the bytes of the vector of triangles 
 
@@ -139,15 +162,35 @@ int main(void)
     /* Shaders for triangle */
 
     // Create a shader using my GLSLObject class                                                            
-    sivelab::GLSLObject shader; // make shader
-    shader.addShader( "vertexShader_passthrough.glsl", sivelab::GLSLObject::VERTEX_SHADER ); // add the vertex shader (gets the triangle on screen or moving stuff)
-    shader.addShader( "fragmentShader_passthrough.glsl", sivelab::GLSLObject::FRAGMENT_SHADER ); // add the fragment shader (this is for all pixels in triangle color them)
-    shader.createProgram(); // then compile and link them
+    //sivelab::GLSLObject shader; // make shader
+    //shader.addShader( "vertexShader_passthrough.glsl", sivelab::GLSLObject::VERTEX_SHADER ); // add the vertex shader (gets the triangle on screen or moving stuff)
+    //shader.addShader( "fragmentShader_passthrough.glsl", sivelab::GLSLObject::FRAGMENT_SHADER ); // add the fragment shader (this is for all pixels in triangle color them)
+    //shader.createProgram(); // then compile and link them
 
     /*We have to make a fragment and vertex shader in the build folder with names above*/
 
 
+    /* Shaders for a Movable triangle*/
+
+    sivelab::GLSLObject shader;
+    shader.addShader("vertexShader_withMatrixTransformation.glsl", sivelab::GLSLObject::VERTEX_SHADER);
+    shader.addShader("fragmentShader_barycentric.glsl", sivelab::GLSLObject::FRAGMENT_SHADER);
+    shader.createProgram();
+
+    GLuint projMatrixID, viewMatrixID;
+    projMatrixID = shader.createUniform("projMatrix");
+    viewMatrixID = shader.createUniform("viewMatrix");
+
     /*Render Triangle stage in while loop*/
+
+    //GLint projMatrixID = shader.createUniform("projMatrix");
+
+    /* Camera information */
+    //glm::vec3 m_pos(0,0,0), m_viewDir(0,0,-1);
+    //glm::vec3 m_U(1,0,0), m_V(0,1,0), m_W(0,0,1);
+
+    //double timeDiff = 0.0, startFrameTime = 0.0, endFrameTime = 0.0;
+
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -160,15 +203,30 @@ int main(void)
         // background color)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        glm::mat4 M_view = glm::lookAt(m_pos, m_pos - m_W, m_V);
+
         /* Render your objects here */
+
+        /* Movable Camera render*/
+
+        shader.activate();
+        glUniformMatrix4fv(projMatrixID, 1, GL_FALSE, glm::value_ptr( M_ortho));
+        glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, glm::value_ptr(M_view));
+
+        glBindVertexArray(m_VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glBindVertexArray(0);
+
+        shader.deactivate();
+
         
         /*Render Triangle stage in while loop*/
         /* Render your objects here */
-        shader.activate(); // activate shader
-        glBindVertexArray(m_VAO); // bind the vertex array
-        glDrawArrays(GL_TRIANGLES, 0, 3); // draw the arrays of triangles
-        glBindVertexArray(0); // unbind
-        shader.deactivate(); // deactivate shader
+        //shader.activate(); // activate shader
+        //glBindVertexArray(m_VAO); // bind the vertex array
+        //glDrawArrays(GL_TRIANGLES, 0, 3); // draw the arrays of triangles
+        //glBindVertexArray(0); // unbind
+        //shader.deactivate(); // deactivate shader
     
 
         // Swap the front and back buffers
@@ -176,6 +234,21 @@ int main(void)
 
         /* Poll for and process events */
         glfwPollEvents();
+
+        float moveRatePerFrame = 0.05;
+
+        if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
+            m_pos = m_pos + -m_W * moveRatePerFrame;
+        }
+        else if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS){
+            m_pos = m_pos - m_U * moveRatePerFrame;
+        }
+        else if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS){
+            m_pos = m_pos + m_W * moveRatePerFrame;
+        }
+        else if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS){
+            m_pos = m_pos + m_U * moveRatePerFrame;
+        }
 
         if (glfwGetKey( window, GLFW_KEY_T ) == GLFW_PRESS) {
             std::cout << "fps: " << 1.0/timeDiff << std::endl;
