@@ -33,6 +33,33 @@ class PerspectiveCamera : public Camera {
 
         void setNY(int height) {ny = height; updateBounds();} // set the height
 
+        int getNX() {return nx;};
+
+        int getNY() {return ny;};
+
+        vec3 getPos() {return pos;};
+
+        vec3 getU() {return U;};
+
+        vec3 getV() {return V;};
+
+        vec3 getW() {return W;};
+
+        float getFocalLength() {return focalLength;};
+
+        float getImagePlane_Width() {return imagePlane_Width;};
+
+        float getImagePlane_Length() {return imagePlane_Length;};
+
+        float getLeftBound() {return leftBound;};
+
+        float getRightBound() {return rightBound;};
+
+        float getBottomBound() {return bottomBound;};
+
+        float getTopBound() {return topBound;};
+
+
     private:
 
         vec3 pos; // position of camera

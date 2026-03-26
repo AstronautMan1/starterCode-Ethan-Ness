@@ -12,6 +12,8 @@
 
 #include "GLSL.h"
 
+#include "PerspectiveCamera.cpp"
+
 int CheckGLErrors(const char *s)
 {
     int errCount = 0;
@@ -31,12 +33,16 @@ int main(void)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
+    PerspectiveCamera camera(vec3(0,0,5), vec3(1,0,0), vec3(0,1,0), vec3(0,0,1), 1.0f, 0.1f, 100.0f, 1000, 1000); // order of parameters (position, u, v, w, focal, image plane width, image plane length, image size x, image size y)
+
     /* Create a windowed mode window and its OpenGL context */
-    int winWidth = 1000;
-    float aspectRatio = 1.0; // 16.0 / 9.0; // winWidth / (float)winHeight;
-    int winHeight = winWidth / aspectRatio;
+    //int winWidth = 1000;
+    //int winWidth = camera.getNX();
+    //float aspectRatio = 1.0; // 16.0 / 9.0; // winWidth / (float)winHeight;
+    //int winHeight = winWidth / aspectRatio;
     
-    GLFWwindow* window = glfwCreateWindow(winWidth, winHeight, "GLFW Example", NULL, NULL);
+    //GLFWwindow* window = glfwCreateWindow(winWidth, winHeight, "GLFW Example", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(camera.getNX(), camera.getNY(), "GLFW Example", NULL, NULL);
     if (!window) {
         std::cerr << "GLFW did not create a window!" << std::endl;
         
@@ -76,22 +82,31 @@ int main(void)
     //glm::mat4 projectionMatrix = glm::ortho(-halfWidth, halfWidth, -halfHeight, halfHeight, -10.0f, 10.0f);
 
     // The ortho parameters, in order: left, right, bottom, top, zNear, zFar for the ortho matrix
-    float halfWidth = 15.0 / 2.0;
-    float halfHeight = halfWidth;
+    //float halfWidth = 15.0 / 2.0;
+    //float halfHeight = halfWidth;
 
-    float left = -halfWidth;
-    float right = halfWidth;
+    //float left = -halfWidth;
+    //float right = halfWidth;
 
-    float bottom = -halfHeight;
-    float top = halfHeight;
+    //float bottom = -halfHeight;
+    //float top = halfHeight;
 
-    float near = 5.0f;
-    float far = -5.0f;
+    //float near = 5.0f;
+    //float far = -5.0f;
 
-    glm::mat4 M_ortho = glm::ortho(-halfWidth, halfWidth, -halfHeight, halfHeight, near, far);
+    //glm::mat4 M_ortho = glm::ortho(-halfWidth, halfWidth, -halfHeight, halfHeight, near, far); // ortho
 
-    glm::vec3 m_pos(0,0,0), m_viewDir(0,0,-1);
-    glm::vec3 m_U(1,0,0), m_V(0,1,0), m_W(0,0,1);
+    //glm::mat4 M_ortho = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f); // perspective
+
+    //float aspect = (float)camera.getNX() / (float)camera.getNY();
+
+    glm::mat4 M_ortho = glm::perspective(glm::radians(45.0f),( (float)camera.getNX() / (float)camera.getNY() ),0.1f, 100.0f); // perspective
+
+    //glm::vec3 m_pos(0,0,0), m_viewDir(0,0,-1);
+    //glm::vec3 m_U(1,0,0), m_V(0,1,0), m_W(0,0,1);
+
+    glm::vec3 m_pos(camera.getPos().x(),camera.getPos().y(),camera.getPos().z()), m_viewDir(0,0,-1);
+    glm::vec3 m_U(camera.getU().x(),camera.getU().y(),camera.getU().z()), m_V(camera.getV().x(),camera.getV().y(),camera.getV().z()), m_W(camera.getW().x(),camera.getW().y(),camera.getW().z());
 
     double timeDiff = 0.0, startFrameTime = 0.0, endFrameTime = 0.0;
 
@@ -177,9 +192,14 @@ int main(void)
     shader.addShader("fragmentShader_barycentric.glsl", sivelab::GLSLObject::FRAGMENT_SHADER);
     shader.createProgram();
 
-    GLuint projMatrixID, viewMatrixID;
+    GLuint projMatrixID, viewMatrixID, modelMatrixID;
     projMatrixID = shader.createUniform("projMatrix");
     viewMatrixID = shader.createUniform("viewMatrix");
+    modelMatrixID = shader.createUniform("modelMatrix");
+
+    //glm::mat4 modelTransform = glm::mat4(1.0);
+    //modelTransform = glm::rotate(modelTransform, 0.0f , glm::vec3(0,1,0));
+
 
     /*Render Triangle stage in while loop*/
 
@@ -191,6 +211,7 @@ int main(void)
 
     //double timeDiff = 0.0, startFrameTime = 0.0, endFrameTime = 0.0;
 
+    float rotAngle = 0.0f;
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -210,8 +231,16 @@ int main(void)
         /* Movable Camera render*/
 
         shader.activate();
+
+        glm::mat4 modelTransform = glm::mat4(1.0);
+        modelTransform = glm::rotate(modelTransform, rotAngle , glm::vec3(0,1,0));
+        rotAngle += 0.001;
+        if(rotAngle > 2.0 * 3.14159) rotAngle = 0.0f;
+
+
         glUniformMatrix4fv(projMatrixID, 1, GL_FALSE, glm::value_ptr( M_ortho));
         glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, glm::value_ptr(M_view));
+        glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, glm::value_ptr(modelTransform));
 
         glBindVertexArray(m_VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
