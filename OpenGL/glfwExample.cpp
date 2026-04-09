@@ -20,6 +20,41 @@ int CheckGLErrors(const char *s)
     return errCount;
 }
 
+struct Vertex{
+    glm::vec3 position;
+    glm::vec3 normal;
+};
+
+Vertex getMidpoint(Vertex v1, Vertex v2, float radius){
+    glm::vec3 mid = glm::normalize((v1.position + v2.position) * 0.5f) * radius;
+    return {mid, glm::normalize(mid)};
+}
+
+void subDivide(Vertex v1, Vertex v2, Vertex v3, std::vector<float>& buffer, int depth, float radius){
+    if (depth == 0){
+        Vertex verts[3] = {v1, v2, v3};
+        for(int i = 0; i < 3; ++i){
+            buffer.push_back(verts[i].position.x);
+            buffer.push_back(verts[i].position.y);
+            buffer.push_back(verts[i].position.z);
+            buffer.push_back(verts[i].normal.x);
+            buffer.push_back(verts[i].normal.y);
+            buffer.push_back(verts[i].normal.z);
+        }
+        return;
+    }
+
+    Vertex m1 = getMidpoint(v1, v2, radius);
+    Vertex m2 = getMidpoint(v2, v3, radius);
+    Vertex m3 = getMidpoint(v3, v1, radius);
+
+    subDivide(v1, m1, m3, buffer, depth - 1, radius);
+    subDivide(v2, m2, m1, buffer, depth - 1, radius);
+    subDivide(v3, m3, m2, buffer, depth - 1, radius);
+    subDivide(m1, m2, m3, buffer, depth - 1, radius);
+
+}
+
 int main(void)
 {
     /* Initialize the library */
@@ -137,13 +172,37 @@ int main(void)
     glBindBuffer(GL_ARRAY_BUFFER, m_triangleVBO[0]);
 
 // this is the actual triangle data that will be copied to                                              
-// the GPU memory                                                                                       
+// the GPU memory     
+/*                                                                                  
     std::vector< float > host_VertexBuffer
     {   -3.0f, -3.0f, 0.0f, 0.0f, 0.0f, 1.0f,   // V0                                    
         3.0f, -3.0f, 0.0f, 0.0f, 0.0f, 1.0f,    // V1                                    
         0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 1.0f     // V2 
     };       
-                 
+*/
+
+    std::vector<float> host_VertexBuffer;
+    float r = 2.0f;
+    int detail = 10;
+
+    Vertex vTop = {{0, r, 0}, {0, 1, 0}};
+    Vertex vBottom = {{0, -r, 0}, {0, -1, 0}};
+    Vertex vLeft = {{-r, 0, 0}, {-1, 0, 0}};
+    Vertex vRight = {{r, 0, 0}, {1, 0, 0}};
+    Vertex vFront = {{0, 0, r}, {0, 0, 1}};
+    Vertex vBack = {{0, 0, -r}, {0, 0, -1}};
+
+    subDivide(vTop, vLeft, vFront, host_VertexBuffer, detail, r);
+    subDivide(vTop, vFront, vRight, host_VertexBuffer, detail, r);
+    subDivide(vTop, vRight, vBack, host_VertexBuffer, detail, r);
+    subDivide(vTop, vBack, vLeft, host_VertexBuffer, detail, r);
+
+    subDivide(vBottom, vFront, vLeft, host_VertexBuffer, detail, r);
+    subDivide(vBottom, vRight, vFront, host_VertexBuffer, detail, r);
+    subDivide(vBottom, vBack, vRight, host_VertexBuffer, detail, r);
+    subDivide(vBottom, vLeft, vBack, host_VertexBuffer, detail, r);
+
+    int numVertices = host_VertexBuffer.size() / 6;
 
     int numBytes = host_VertexBuffer.size() * sizeof(float); // buffer works in bytes so this calculates the bytes of the vector of triangles 
 
@@ -192,8 +251,8 @@ int main(void)
     /* Shaders for a Movable triangle*/
 
     sivelab::GLSLObject shader;
-    shader.addShader("vertexShader_normal.glsl", sivelab::GLSLObject::VERTEX_SHADER);
-    shader.addShader("fragmentShader_normal.glsl", sivelab::GLSLObject::FRAGMENT_SHADER);
+    shader.addShader("vertexShader_BlinnPhong.glsl", sivelab::GLSLObject::VERTEX_SHADER);
+    shader.addShader("fragmentShader_BlinnPhong.glsl", sivelab::GLSLObject::FRAGMENT_SHADER);
     shader.createProgram();
 
     GLuint projMatrixID, viewMatrixID, modelMatrixID, normalMatrixID;
@@ -245,9 +304,9 @@ int main(void)
         shader.activate();
 
         glm::mat4 modelTransform = glm::mat4(1.0);
-        modelTransform = glm::rotate(modelTransform, rotAngle , glm::vec3(0,1,0));
-        rotAngle += 0.001;
-        if(rotAngle > 2.0 * 3.14159) rotAngle = 0.0f;
+        //modelTransform = glm::rotate(modelTransform, rotAngle , glm::vec3(0,1,0));
+        //rotAngle += 0.001;
+        //if(rotAngle > 2.0 * 3.14159) rotAngle = 0.0f;
 
         glm::mat4 normalMatrix = glm::transpose(glm::inverse(modelTransform));
 
@@ -264,7 +323,8 @@ int main(void)
         glUniform1f(shininessID, 32.0f);
 
         glBindVertexArray(m_VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        //glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, numVertices);
         glBindVertexArray(0);
 
         shader.deactivate();
