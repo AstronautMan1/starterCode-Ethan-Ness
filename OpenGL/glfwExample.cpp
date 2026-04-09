@@ -202,7 +202,8 @@ int main(void)
 
 // this is the actual triangle data that will be copied to                                              
 // the GPU memory     
-/*                                                                                  
+/*
+    // This is the base standard Triangle                                                                         
     std::vector< float > host_VertexBuffer
     {   -3.0f, -3.0f, 0.0f, 0.0f, 0.0f, 1.0f,   // V0                                    
         3.0f, -3.0f, 0.0f, 0.0f, 0.0f, 1.0f,    // V1                                    
@@ -220,6 +221,20 @@ int main(void)
     Vertex vRight = {{r, 0, 0}, {1, 0, 0}};
     Vertex vFront = {{0, 0, r}, {0, 0, 1}};
     Vertex vBack = {{0, 0, -r}, {0, 0, -1}};
+    Vertex Triangle1V1 = {{-6.0f, -3.0f, -3.0f}, {0.0f, 0.0f, 1.0f}};
+    Vertex Triangle1V2 = {{-3.0f, -3.0f, -3.0f}, {0.0f, 0.0f, 1.0f}};
+    Vertex Triangle1V3 = {{-3.0f, 0.0f, -3.0f}, {0.0f, 0.0f, 1.0f}};
+
+    Vertex Tri[] = {Triangle1V1, Triangle1V2, Triangle1V3};
+
+    for(int i = 0; i < 3; ++i){
+        host_VertexBuffer.push_back(Tri[i].position.x);
+        host_VertexBuffer.push_back(Tri[i].position.y);
+        host_VertexBuffer.push_back(Tri[i].position.z);
+        host_VertexBuffer.push_back(Tri[i].normal.x);
+        host_VertexBuffer.push_back(Tri[i].normal.y);
+        host_VertexBuffer.push_back(Tri[i].normal.z);
+    }
 
     subDivide(vTop, vLeft, vFront, host_VertexBuffer, detail, r);
     subDivide(vTop, vFront, vRight, host_VertexBuffer, detail, r);
@@ -280,8 +295,8 @@ int main(void)
     /* Shaders for a Movable triangle*/
 
     sivelab::GLSLObject shader;
-    shader.addShader("vertexShader_BlinnPhong.glsl", sivelab::GLSLObject::VERTEX_SHADER);
-    shader.addShader("fragmentShader_BlinnPhong.glsl", sivelab::GLSLObject::FRAGMENT_SHADER);
+    shader.addShader("vertexShader_BlinnMultipleLights.glsl", sivelab::GLSLObject::VERTEX_SHADER);
+    shader.addShader("fragmentShader_BlinnMultipleLights.glsl", sivelab::GLSLObject::FRAGMENT_SHADER);
     shader.createProgram();
 
     GLuint projMatrixID, viewMatrixID, modelMatrixID, normalMatrixID;
@@ -290,7 +305,22 @@ int main(void)
     modelMatrixID = shader.createUniform("modelMatrix");
     normalMatrixID = shader.createUniform("normalMatrix");
 
+    glm::vec4 lightPositions[] = {
+        glm::vec4(5.0f, 5.0f, 5.0f, 1.0f),
+        glm::vec4(-5.0f, 5.0f, 5.0f, 1.0f),
+        glm::vec4(0.0f, -5.0f, 2.0f, 1.0f)
+    };
+
+    glm::vec3 lightColors[] = {
+
+        glm::vec3(1.0f, 1.0f, 1.0f),
+        glm::vec3(0.0f, 1.0f, 0.0f),
+        glm::vec3(1.0f, 0.0f, 0.0f)
+    };
+
+
     GLint lightPosWorldID = shader.createUniform("lightPosWorld"); // light position for lambertian and blinnphong
+    GLint lightColID = shader.createUniform("lightColors");
     GLint diffuseComponentID = shader.createUniform("diffuseComponent"); // diffuse component for lambertian and blinnphong
 
     GLint cameraPosWorldID = shader.createUniform("cameraPosWorld");
@@ -343,6 +373,9 @@ int main(void)
         /* Movable Camera render*/
 
         shader.activate();
+
+        glUniform4fv(lightPosWorldID, 3, glm::value_ptr(lightPositions[0]));
+        glUniform3fv(lightColID, 3, glm::value_ptr(lightColors[0]));
 
         glm::mat4 modelTransform = glm::mat4(1.0);
         //modelTransform = glm::rotate(modelTransform, rotAngle , glm::vec3(0,1,0));
