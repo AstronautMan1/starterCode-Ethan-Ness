@@ -14,6 +14,35 @@
 
 #include "PerspectiveCamera.cpp"
 
+float yaw = -90.0f;
+float pitch = 0.0f;
+float lastX = 500.0f, lastY = 500.0f;
+bool firstMouse = true;
+
+float sensitivity = 0.1f;
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos){
+    if (firstMouse){
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos;
+    lastX = xpos;
+    lastY = ypos;
+
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
+
+    yaw += xoffset;
+    pitch += yoffset;
+
+    if (pitch > 89.0f) pitch = 89.0f;
+    if (pitch < -89.0f) pitch = -89.0f;
+}
+
 int CheckGLErrors(const char *s)
 {
     int errCount = 0;
@@ -183,7 +212,7 @@ int main(void)
 
     std::vector<float> host_VertexBuffer;
     float r = 2.0f;
-    int detail = 10;
+    int detail = 6;
 
     Vertex vTop = {{0, r, 0}, {0, 1, 0}};
     Vertex vBottom = {{0, -r, 0}, {0, -1, 0}};
@@ -284,6 +313,9 @@ int main(void)
 
     float rotAngle = 0.0f;
 
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetCursorPosCallback(window, mouse_callback);
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
@@ -294,6 +326,15 @@ int main(void)
         // Clear the window's buffer (or clear the screen to our
         // background color)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        glm::vec3 front;
+        front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+        front.y = sin(glm::radians(pitch));
+        front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+
+        m_W = -glm::normalize(front);
+        m_U = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), m_W));
+        m_V = glm::normalize(glm::cross(m_W, m_U));
 
         glm::mat4 M_view = glm::lookAt(m_pos, m_pos - m_W, m_V);
 
@@ -345,19 +386,20 @@ int main(void)
         /* Poll for and process events */
         glfwPollEvents();
 
-        float moveRatePerFrame = 0.05;
+        float speed = 2.5f;
+        float moveRate = speed * (float)timeDiff;
 
         if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
-            m_pos = m_pos + -m_W * moveRatePerFrame;
+            m_pos += -m_W * moveRate;
         }
         else if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS){
-            m_pos = m_pos - m_U * moveRatePerFrame;
+            m_pos -= m_U * moveRate;
         }
         else if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS){
-            m_pos = m_pos + m_W * moveRatePerFrame;
+            m_pos += m_W * moveRate;
         }
         else if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS){
-            m_pos = m_pos + m_U * moveRatePerFrame;
+            m_pos += m_U * moveRate;
         }
 
         if (glfwGetKey( window, GLFW_KEY_T ) == GLFW_PRESS) {
