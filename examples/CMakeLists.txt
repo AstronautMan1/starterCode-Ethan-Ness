@@ -112,3 +112,10 @@ add_executable(test_sceneloader
 target_link_libraries(test_sceneloader cs4212-util)
 target_link_libraries(test_sceneloader PNG::PNG)
 target_link_libraries(test_sceneloader ZLIB::ZLIB)
+
+add_executable(test_diffuseInterBVH
+  test_diffuseInterBVH.cpp
+)
+target_link_libraries(test_diffuseInterBVH cs4212-util)
+target_link_libraries(test_diffuseInterBVH PNG::PNG)
+target_link_libraries(test_diffuseInterBVH ZLIB::ZLIB)

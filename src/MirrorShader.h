@@ -10,6 +10,7 @@
     Includes Section
 */
 #include "Shader.h" // shader class
+#include "shape.h"
 
 class hitList; // forward declaration to avoid double inclusion
 
@@ -20,7 +21,8 @@ class MirrorShader : public shader {
     
     MirrorShader(const vec3& Passcolor, float Passreflectance) : reflectance(Passreflectance), albedo(Passcolor) {} // mirrorshader constructor
 
-    virtual vec3 rayColor(const ray &r, const hit_record &rec, const Light &light, hitList &scene, int depth, vec3 &bgcolor) const override; // rayColor function which it inherited from shader
+    virtual vec3 rayColor(const ray &r, const hit_record &rec, const Light &light, Shape &scene, int depth, const vec3 &bgcolor) const override; // rayColor function which it inherited from shader
+
 
     private:
         

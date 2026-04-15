@@ -19,6 +19,8 @@ add_library (cs4212-util
   SceneContainer.h
   SceneLoader.h
   SceneParser_JSON.h SceneParser_JSON.cpp
+  BVH.h BVH.cpp
+  BoundingBox.h
 )
 
 

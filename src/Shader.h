@@ -13,6 +13,7 @@
 #include "ray.h" // ray class
 #include "hitRecord.h" // hit record class
 #include "Light.h" // light class
+#include "shape.h"
 
 class hitList; // forward declaration
 
@@ -25,7 +26,8 @@ class shader {
 
         virtual ~shader() {} // default destructor
 
-        virtual vec3 rayColor(const ray &r, const hit_record &rec, const Light &light, hitList &scene, int depth, vec3 &bgcolor) const = 0; // pure virtual function rayColor for other shaders to implemement
+        virtual vec3 rayColor(const ray &r, const hit_record &rec, const Light &light, Shape &scene, int depth, const vec3 &bgcolor) const = 0; // pure virtual function rayColor for other shaders to implemement
+    
 
     private:
 

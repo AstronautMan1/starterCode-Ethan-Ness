@@ -16,6 +16,7 @@
 #include "BlinnPhongShader.h" // blinn phong class
 #include "handleGraphicsArgs.h"
 #include "Light.h" // light class
+#include "BVH.h"
 
 
 /// @brief This is the lambert shader image maker function which makes the image
@@ -40,9 +41,10 @@ void BlinnPhongShadeImage(int argc, char *argv[]){
 
     PerspectiveCamera pc(position, U, V, W, focal, planeWidth, planeHeight, fb.getWidth(), fb.getHeight()); // making the perspective camera
 
-    hitList scene; // make the hitlist for objects
+    //hitList scene; // make the hitlist for objects
+    std::vector<std::shared_ptr<Shape>> objects;
 
-    Light mainlight(point3(1,0,-1), vec3(1,1,1), "pointlight"); // light object at a position of 5,5,5 (x,y,z) and an intensity of 1,1,1 (white light)
+    Light mainlight(point3(1,2,1), vec3(1,1,1), "pointlight"); // light object at a position of 5,5,5 (x,y,z) and an intensity of 1,1,1 (white light)
 
     auto GreenShade = std::make_shared<BlinnPhongShader>(vec3(0.2,1.0,0.2), 150.0f, 0.6f); // LambertianShader blueshade it is a blue shader of Lambertian
 
@@ -50,8 +52,12 @@ void BlinnPhongShadeImage(int argc, char *argv[]){
 
     //std::shared_ptr<Shape> s2 = std::make_shared<Triangle>(point3(3,3,-1), point3(4,6,-1), point3(5,3,-1), GreenShade);
 
-    scene.add(s1); // added the shape to the scene hit list
+    //scene.add(s1); // added the shape to the scene hit list
     //scene.add(s2);
+
+    objects.push_back(s1);
+
+    std::shared_ptr<bvhNode> sceneBVH = std::make_shared<bvhNode>(objects, 0, objects.size());
 
     // for loop going through pixels
     for (int x = 0; x < fb.getWidth(); ++x){
@@ -62,7 +68,8 @@ void BlinnPhongShadeImage(int argc, char *argv[]){
             ray r; // ray r
             pc.generateRay(x, y, r); // generate the ray at pixel
 
-            vec3 color = scene.computeRayColor(r,tmin,tmax,mainlight, vec3(0.5, 0.5, 0.5), depth);
+            //vec3 color = scene.computeRayColor(r,tmin,tmax,mainlight, vec3(0.5, 0.5, 0.5), depth);
+            vec3 color = sceneBVH->computeRayColor(r, tmin, tmax, mainlight, vec3(0,0,0), depth);
 
             fb.setPixelColor(x,y,color);
         }

@@ -14,6 +14,7 @@
 #include "hitRecord.h" // hit record class
 #include "Shader.h" // shader class
 #include "Light.h" // light class
+#include "BoundingBox.h"
 #include <vector> // vector library
 
 /// @brief The hitList class is a class which has a vector of shared pointers to shape objects and inherits the public of the shape class and has its own intersect 
@@ -31,6 +32,19 @@ class hitList : public Shape{
         bool intersect(const ray &r, float tmin, float &tmax, hit_record &rec) override; // pure virtual intersect overriden from Shape class
 
         vec3 computeRayColor(const ray &r, float tmin, float tmax, const Light &light, const vec3 &bgcolor, int depth); // compute ray color function
+
+        BoundingBox boundingBox() const override {
+            if (objects.empty()) {
+                // Return a default box if empty
+                return BoundingBox();
+            }
+            BoundingBox box = objects[0]->boundingBox();
+            for (size_t i = 1; i < objects.size(); ++i) {
+                box = BoundingBox::mergeBoundingBoxes(box, objects[i]->boundingBox());
+            }
+            return box;
+        }
+
 
     private:
 

@@ -17,7 +17,7 @@
 /// @param scene the hit list for recursive ray tracing
 /// @param depth the recursion depth - controls how many reflections to trace
 /// @return we return a vec3 which is the color of the reflected rays
-vec3 MirrorShader::rayColor(const ray &r, const hit_record &rec, const Light &light, hitList &scene, int depth, vec3 &bgcolor) const {
+vec3 MirrorShader::rayColor(const ray &r, const hit_record &rec, const Light &light, Shape &scene, int depth, const vec3 &bgcolor) const {
 
     if (depth <= 0) {
         return bgcolor; // stop recursion if depth is 0

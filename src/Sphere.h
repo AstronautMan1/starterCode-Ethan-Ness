@@ -12,6 +12,7 @@
     Includes section
 */
 #include "shape.h" // shape class
+#include "BoundingBox.h"
 
 /// @brief The Sphere class which inherits the shape classes public functions and implements the pure virtual intersect function
 class Sphere : public Shape{
@@ -35,6 +36,12 @@ class Sphere : public Shape{
         void setRadius(float newRadius); // setter for a new radius
 
         void setShader(std::shared_ptr<shader> newShader) {shaderPtr = newShader;}
+
+        BoundingBox boundingBox() const override{
+            vec3 min = center - vec3(radius, radius, radius);
+            vec3 max = center + vec3(radius, radius, radius);
+            return BoundingBox(min, max);
+        }
 
     private:
 

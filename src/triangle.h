@@ -11,6 +11,7 @@
 */
 #include "vec3.h" // vec3 class
 #include "shape.h" // Shape class
+#include "BoundingBox.h"
 
 /// @brief This is the triangle class which inherits from shape
 class Triangle : public Shape{
@@ -26,6 +27,21 @@ class Triangle : public Shape{
         bool intersect(const ray &r, float tmin, float &tmax, hit_record &rec) override; // overridden intersect function which is from the Shape interface
 
         void setShader(std::shared_ptr<shader> newShader) {shaderPtr = newShader;}
+
+        BoundingBox boundingBox() const override {
+            vec3 min(
+                std::min({vertex_a.x(), vertex_b.x(), vertex_c.x()}),
+                std::min({vertex_a.y(), vertex_b.y(), vertex_c.y()}),
+                std::min({vertex_a.z(), vertex_b.z(), vertex_c.z()})
+            );
+            vec3 max(
+                std::max({vertex_a.x(), vertex_b.x(), vertex_c.x()}),
+                std::max({vertex_a.y(), vertex_b.y(), vertex_c.y()}),
+                std::max({vertex_a.z(), vertex_b.z(), vertex_c.z()})
+            );
+
+            return BoundingBox(min, max);
+        }
 
     private:
 

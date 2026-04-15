@@ -18,7 +18,7 @@
 /// @param scene the hit list for recursive ray tracing for reflections
 /// @param depth the recursion depth for ray tracing reflections
 /// @return we return the ambient + diffuse + specular
-vec3 BlinnPhongShader::rayColor(const ray &r, const hit_record &rec, const Light &light, hitList &scene, int depth, vec3 &bgcolor) const {
+vec3 BlinnPhongShader::rayColor(const ray &r, const hit_record &rec, const Light &light, Shape &scene, int depth, const vec3 &bgcolor) const {
 
     // if depth is less then or equal to 0 we return black
     if (depth <= 0){

@@ -17,7 +17,7 @@
 /// @param scene the hit list for recursive ray tracing
 /// @param depth the recursion depth for ray tracing reflections (not used here just needed for interface override compliance)
 /// @return we return a vec3 which is the color of that pixel
-vec3 LambertianShader::rayColor(const ray &r, const hit_record &rec, const Light &light, hitList &scene, int depth, vec3 &bgcolor) const {
+vec3 LambertianShader::rayColor(const ray &r, const hit_record &rec, const Light &light, Shape &scene, int depth, const vec3 &bgcolor) const {
 
     if (depth <= 0){ // if depth is equal or less then 0 we return black
         return vec3(0,0,0);

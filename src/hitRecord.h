@@ -42,13 +42,15 @@ class hit_record {
 
         void setShader(std::shared_ptr<shader> newShader) {shaderPointer = newShader;}
 
+        double t; // t of the object
+
     private:
 
         point3 point; // point of impact of ray
 
         vec3 normal; // normal of the ray
 
-        double t; // t of the object
+        //double t; // t of the object
 
         bool front_face; // did the ray hit the front or back of the object true if front
 
