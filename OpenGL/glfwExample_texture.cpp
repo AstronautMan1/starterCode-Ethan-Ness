@@ -18,6 +18,61 @@
 
 #include "SimpleCamera_Impl.h"
 
+#include <cmath>
+
+double M_PI = std::acos(-1.0);
+float yaw = -90.0f;
+float pitch = 0.0f;
+float lastX = 500.0f, lastY = 500.0f;
+bool firstMouse = true;
+
+float sensitivity = 0.1f;
+
+
+
+struct Vertex{
+    glm::vec3 position;
+    glm::vec3 normal;
+    glm::vec2 texCoords;
+};
+
+Vertex getMidpoint(Vertex v1, Vertex v2, float radius){
+    glm::vec3 mid = glm::normalize((v1.position + v2.position) * 0.5f) * radius;
+    return {mid, glm::normalize(mid)};
+}
+
+void subDivide(Vertex v1, Vertex v2, Vertex v3, std::vector<float>& buffer, int depth, float radius){
+    if (depth == 0){
+        Vertex verts[3] = {v1, v2, v3};
+        for(int i = 0; i < 3; ++i){
+            buffer.push_back(verts[i].position.x);
+            buffer.push_back(verts[i].position.y);
+            buffer.push_back(verts[i].position.z);
+            buffer.push_back(verts[i].normal.x);
+            buffer.push_back(verts[i].normal.y);
+            buffer.push_back(verts[i].normal.z);
+
+            float u = 0.5f + (atan2(verts[i].position.z, verts[i].position.x) / (2.0f * M_PI));
+
+            float v = 0.5f + (asin(verts[i].position.y / radius) / M_PI);
+
+            buffer.push_back(u);
+            buffer.push_back(v);
+        }
+        return;
+    }
+
+    Vertex m1 = getMidpoint(v1, v2, radius);
+    Vertex m2 = getMidpoint(v2, v3, radius);
+    Vertex m3 = getMidpoint(v3, v1, radius);
+
+    subDivide(v1, m1, m3, buffer, depth - 1, radius);
+    subDivide(v2, m2, m1, buffer, depth - 1, radius);
+    subDivide(v3, m3, m2, buffer, depth - 1, radius);
+    subDivide(m1, m2, m3, buffer, depth - 1, radius);
+
+}
+
 int CheckGLErrors(const char *s)
 {
   int errCount = 0;
@@ -94,6 +149,7 @@ int main(void)
       
   glBindBuffer(GL_ARRAY_BUFFER, m_triangleVBO[0]);
 
+  /*
   std::vector<float> host_VertexBuffer{ -3.0f, -3.0f, 0.0f,// V0
                                         0.0, 0.0, 1.0,
                                         0.0, 0.0, // t0
@@ -125,6 +181,44 @@ int main(void)
   // once copied, we no longer need the data on the host
   host_VertexBuffer.clear();
 
+  */
+
+    std::vector<float> host_VertexBuffer;
+    float r = 2.0f;
+    int detail = 6;
+
+    Vertex vTop = {{0, r, 0}, {0, 1, 0}};
+    Vertex vBottom = {{0, -r, 0}, {0, -1, 0}};
+    Vertex vLeft = {{-r, 0, 0}, {-1, 0, 0}};
+    Vertex vRight = {{r, 0, 0}, {1, 0, 0}};
+    Vertex vFront = {{0, 0, r}, {0, 0, 1}};
+    Vertex vBack = {{0, 0, -r}, {0, 0, -1}};
+
+
+    subDivide(vTop, vLeft, vFront, host_VertexBuffer, detail, r);
+    subDivide(vTop, vFront, vRight, host_VertexBuffer, detail, r);
+    subDivide(vTop, vRight, vBack, host_VertexBuffer, detail, r);
+    subDivide(vTop, vBack, vLeft, host_VertexBuffer, detail, r);
+
+    subDivide(vBottom, vFront, vLeft, host_VertexBuffer, detail, r);
+    subDivide(vBottom, vRight, vFront, host_VertexBuffer, detail, r);
+    subDivide(vBottom, vBack, vRight, host_VertexBuffer, detail, r);
+    subDivide(vBottom, vLeft, vBack, host_VertexBuffer, detail, r);
+
+    //int numVertices = host_VertexBuffer.size() / 6;
+    int numVertices = host_VertexBuffer.size() / 8;
+
+    int numBytes = host_VertexBuffer.size() * sizeof(float); // buffer works in bytes so this calculates the bytes of the vector of triangles 
+
+    // buffer can only do one thing at a time
+    // copy the numBytes from host_VertexBuffer t the GPU and store in                                      
+    // the currently bound VBO                                                                              
+    glBufferData(GL_ARRAY_BUFFER, numBytes, host_VertexBuffer.data(), GL_STATIC_DRAW); // bind buffer
+    glBindBuffer(GL_ARRAY_BUFFER, 0); // unbind buffer
+
+    // once copied, we no longer need the data on the host                                                  
+    host_VertexBuffer.clear(); // clear the data from CPU or Host
+
   // VAO for the VBO
   // create a vertex array object that will map the attributes in
   // our vertex buffer to different location attributes for our
@@ -140,14 +234,24 @@ int main(void)
   glEnableVertexAttribArray(1);  // enable attrib 1 - normal
   glEnableVertexAttribArray(2);  // enable attrib 1 - texture coord
 
+  int stride = 8 * sizeof(GLfloat);
+
   glBindBuffer(GL_ARRAY_BUFFER, m_triangleVBO[0]);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), 0);
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (const GLvoid *)12);  // Normal
-  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (const GLvoid *)24);  // texture
+
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (const GLvoid *)0);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, (const GLvoid *)(3 * sizeof(GLfloat)));
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride, (const GLvoid *)(6 * sizeof(GLfloat)));
+
+
+  //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), 0);
+  //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (const GLvoid *)12);  // Normal
+  //glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (const GLvoid *)24);  // texture
+
+
   glBindVertexArray(0);
 
   // Load texture
-  std::string texFilename = "textureMap.png";
+  std::string texFilename = "textureAtlas.png";
   std::cout << "Reading texture map data from file: " << texFilename << std::endl;
   png::image<png::rgb_pixel> texPNGImage;
   texPNGImage.read(texFilename);
@@ -214,7 +318,7 @@ int main(void)
   float rotAngle = 0.0f;
   float phongExp = 64.0f;
 
-  glm::vec4 lightPos = glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f );
+  glm::vec4 lightPos = glm::vec4( 0.0f, 0.0f, 5.0f, 1.0f );
 
   /* Loop until the user closes the window */
   while (!glfwWindowShouldClose(window)) {
@@ -233,7 +337,7 @@ int main(void)
     modelTransform = glm::rotate(modelTransform, rotAngle, glm::vec3(0, 1, 0));
     // no rotation initially
     if (doRotate) {
-        rotAngle += 0.01;
+        rotAngle += 0.0001;
         if (rotAngle > 2.0*3.14159) rotAngle = 0.0f;
     }
     
@@ -252,7 +356,7 @@ int main(void)
     glUniform4fv(cameraPosWorldID, 1, glm::value_ptr(cameraPos));    
 
     // Pass shader data
-    glm::vec3 diffuse = glm::vec4( 0.8f, 0.3f, 0.70f, 1.0f );
+    glm::vec3 diffuse = glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f );
     glUniform3fv(diffuseComponentID, 1, glm::value_ptr(diffuse));
 
     glm::vec3 specular = glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f );
@@ -266,7 +370,8 @@ int main(void)
     glUniform1i(texUnitID, 0);
 
     glBindVertexArray(m_VAO);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    //glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDrawArrays(GL_TRIANGLES, 0, numVertices);
     glBindVertexArray(0);
 
     glBindTexture(GL_TEXTURE_2D, 0);
