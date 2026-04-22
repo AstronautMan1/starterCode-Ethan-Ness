@@ -119,3 +119,10 @@ add_executable(test_diffuseInterBVH
 target_link_libraries(test_diffuseInterBVH cs4212-util)
 target_link_libraries(test_diffuseInterBVH PNG::PNG)
 target_link_libraries(test_diffuseInterBVH ZLIB::ZLIB)
+
+add_executable(test_diffuseInterBVHSSS
+  test_diffuseInterBVHSSS.cpp
+)
+target_link_libraries(test_diffuseInterBVHSSS cs4212-util)
+target_link_libraries(test_diffuseInterBVHSSS PNG::PNG)
+target_link_libraries(test_diffuseInterBVHSSS ZLIB::ZLIB)

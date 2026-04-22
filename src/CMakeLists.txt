@@ -21,6 +21,7 @@ add_library (cs4212-util
   SceneParser_JSON.h SceneParser_JSON.cpp
   BVH.h BVH.cpp
   BoundingBox.h
+  SubSurfaceScatteringShader.h SubSurfaceScatteringShader.cpp
 )
 
 
