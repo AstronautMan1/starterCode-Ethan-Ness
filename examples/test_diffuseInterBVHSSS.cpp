@@ -58,9 +58,10 @@ void interDiffuse(int argc, char *argv[]){
     PerspectiveCamera pc(position, U, V, W, focal, planeWidth, planeHeight, fb.getWidth(), fb.getHeight());
 
     std::vector<std::shared_ptr<Shape>> objects;
-    Light mainlight(point3(5.0, 5.0, 5.0), vec3(1, 1, 1), "pointlight");
+    Light mainlight(point3(1.0, 0.5, -3.0), vec3(1, 1, 1), "pointlight");
+    Light secondLight(point3(5.0,5.0,5.0), vec3(1,1,1), "pointlight");
 
-    auto SSSSphere = std::make_shared<SubSurfaceShader>(vec3(1.0,0.7,0.6), 1.5f, 0.2f); 
+    auto SSSSphere = std::make_shared<SubSurfaceShader>(vec3(1.0,0.7,0.6), 2.0f, 0.2f); // parameters are color(albedo), Scattering(sigma_s), Absorption(sigma_a) 
     std::shared_ptr<Shape> SubSurfaceSphere = std::make_shared<Sphere>(point3(1.0f, 0.5, -3.0f), 1.0f, SSSSphere); 
 
     auto GroundShade = std::make_shared<LambertianShader>(vec3(0.3, 1.0, 0.3)); 
@@ -98,6 +99,7 @@ void interDiffuse(int argc, char *argv[]){
                 pc.generateRay(x + u_offset, y + v_offset, r); 
 
                 pixel_color += sceneBVH->computeRayColor(r, tmin, tmax, mainlight, vec3(0,0,0), depth);
+                pixel_color += sceneBVH->computeRayColor(r, tmin, tmax, secondLight, vec3(0,0,0), depth);
             }
 
             // Average the accumulated color by the number of samples

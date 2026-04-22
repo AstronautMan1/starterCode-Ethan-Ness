@@ -1,24 +1,7 @@
-/*
-    @author Ethan Ness
+#include "EmitterShader.h"
 
-    A basic setup for a emitter shader to implement area lights
-*/
+vec3 EmitterShader::rayColor(const ray &r, const hit_record &rec, const Light &light, Shape &scene, int depth, const vec3 &bgcolor) const {
 
-#pragma once
+    return emitColor * intensity;
 
-#include "Shader.h"
-
-class EmitterShader : public shader{
-
-
-    public:
-
-        EmitterShader() {} // constructor
-
-        virtual vec3 rayColor(const ray &r, const hit_record &rec, const Light &light, hitList &scene, int depth, vec3 &bgcolor) const override; // rayColor
-
-
-    private:
-
-
-};
+}

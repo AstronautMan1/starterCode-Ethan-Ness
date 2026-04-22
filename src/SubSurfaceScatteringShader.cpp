@@ -14,8 +14,8 @@ vec3 SubSurfaceShader::rayColor(const ray &r, const hit_record &rec, const Light
                                  Shape &scene, int depth, const vec3 &bgcolor) const {
     if (depth <= 0) return vec3(0,0,0);
 
-    vec3 hitPoint = rec.getPoint();
-    vec3 normal = rec.getNormal();
+    vec3 hitPoint = rec.getPoint(); // point of ray hit on object
+    vec3 normal = rec.getNormal(); // normal of hit object
     
     // 1. Direct diffuse silhouette
     vec3 L_surf = unit_vector(light.getPosition() - hitPoint);
