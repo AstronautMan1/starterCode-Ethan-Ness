@@ -17,6 +17,8 @@ class EmitterShader : public shader{
 
         virtual vec3 rayColor(const ray &r, const hit_record &rec, const Light &light, Shape &scene, int depth, const vec3 &bgcolor) const override; // rayColor
 
+        virtual vec3 emitted() const override { return emitColor * intensity; }
+
 
     private:
 

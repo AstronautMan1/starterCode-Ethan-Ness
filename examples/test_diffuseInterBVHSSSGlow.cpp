@@ -61,6 +61,8 @@ void interDiffuse(int argc, char *argv[]){
     std::vector<std::shared_ptr<Shape>> objects;
     Light mainlight(point3(1.0,0.5,-3), vec3(1,1,1), "pointlight"); // Main Light inside the SSS sphere
     Light secondLight(point3(5,5,5), vec3(0.1,0.1,0.1), "pointlight"); // secondary light for ambient
+    Light GreenSSSLight(point3(-1.0f, 1.5f, -3.0f), vec3(1,1,1), "pointlight");
+    Light BlueSSSLight(point3(-2.0f, 0.5f, -3.0f), vec3(1,1,1), "pointlight");
 
     // Subsurface Scattered sphere 
     auto SSSSphere = std::make_shared<SubSurfaceShader>(vec3(1.0,0.7,0.6), 5.0f, 0.2f); // parameters are color(albedo), Scattering(sigma_s), Absorption(sigma_a) 
@@ -75,8 +77,14 @@ void interDiffuse(int argc, char *argv[]){
     std::shared_ptr<Shape> wall = std::make_shared<Sphere>(point3(0,0,-15), 10.0f, WallShade); // a sphere with wall shade for a wall
 
     // Create a red Blinn Phong sphere
-    auto RedShade = std::make_shared<BlinnPhongShader>(vec3(1.0, 0.2, 0.2), 32.0f, 0.5f); // red Blinn Phong Shader
+    auto RedShade = std::make_shared<LambertianShader>(vec3(1.0, 0.2, 0.2)); // red Blinn Phong Shader
     std::shared_ptr<Shape> redSphere = std::make_shared<Sphere>(point3(-1.0f, 0.5, -3.0f), 1.0f, RedShade); // make shared pointer of shape sphere with the red blinn phong shader
+
+    auto SSSBlue = std::make_shared<SubSurfaceShader>(vec3(0.6, 0.7, 1.0), 5.0f, 0.2f);
+    std::shared_ptr<Shape> SubSurfaceBlue = std::make_shared<Sphere>(point3(-2.0f, 0.5f, -3.0f), 1.0f, SSSBlue);
+
+    auto SSSGreen = std::make_shared<SubSurfaceShader>(vec3(0.6, 1.0, 0.7), 5.0f, 0.2f);
+    std::shared_ptr<Shape> SubsurfaceGreen = std::make_shared<Sphere>(point3(-1.0f, 1.5f, -3.0f), 1.0f, SSSGreen);
 
     /*
      Add objects to the objects shape list
@@ -84,7 +92,9 @@ void interDiffuse(int argc, char *argv[]){
     objects.push_back(SubSurfaceSphere); 
     objects.push_back(ground);
     objects.push_back(redSphere);
-    objects.push_back(wall);
+    objects.push_back(SubSurfaceBlue);
+    objects.push_back(SubsurfaceGreen);
+    //objects.push_back(wall);
     //objects.push_back(lightSphere);
 
     std::shared_ptr<bvhNode> sceneBVH = std::make_shared<bvhNode>(objects, 0, objects.size()); // make a scene bvh with the objects passed in
@@ -108,6 +118,9 @@ void interDiffuse(int argc, char *argv[]){
 
                 pixel_color += sceneBVH->computeRayColor(r, tmin, tmax, mainlight, vec3(0,0,0), depth); // compute ray color for main light
                 pixel_color += sceneBVH->computeRayColor(r, tmin, tmax, secondLight, vec3(0,0,0), depth); // compute ray color for second light
+                pixel_color += sceneBVH->computeRayColor(r, tmin, tmax, BlueSSSLight, vec3(0,0,0), depth); // compute ray color for second light
+                pixel_color += sceneBVH->computeRayColor(r, tmin, tmax, GreenSSSLight, vec3(0,0,0), depth); // compute ray color for second light
+
             }
 
             // Average the accumulated color by the number of samples

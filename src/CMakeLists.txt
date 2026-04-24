@@ -22,6 +22,7 @@ add_library (cs4212-util
   BVH.h BVH.cpp
   BoundingBox.h
   SubSurfaceScatteringShader.h SubSurfaceScatteringShader.cpp
+  EmitterShader.h EmitterShader.cpp
 )
 
 

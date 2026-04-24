@@ -1,19 +1,38 @@
-#include "BVH.h"
+/*
+    @author Ethan Ness
 
+    @details This is the implementation file for the BVH
+*/
+
+#include "BVH.h" // include BVH class header
+
+/// @brief This is the compute ray color function that BVH inherits from shape
+/// @param r ray r
+/// @param tmin tmin value
+/// @param tmax tmax value
+/// @param light light
+/// @param bgcolor background color
+/// @param depth depth value
+/// @return return the vec3 of the the computed ray color
 vec3 bvhNode::computeRayColor(const ray &r, float tmin, float tmax, const Light &light, const vec3 &bgcolor, int depth) {
-    if (depth <= 0) return bgcolor;
 
-    hit_record rec;
-    float localTmax = tmax;
+    if (depth <= 0) return bgcolor; // if the depth is 0 or less return the background color
 
-    if (this->intersect(r, tmin, localTmax, rec)) {
-        std::shared_ptr<shader> useShader = rec.getShader();
-        return useShader->rayColor(r, rec, light, *this, depth, bgcolor);
+    hit_record rec; // make a hit record
+    float localTmax = tmax; // local tmax
+
+    if (this->intersect(r, tmin, localTmax, rec)) { // if intersect on ray is true
+        std::shared_ptr<shader> useShader = rec.getShader(); // make a shader pointer for what shader to use from intersected shape
+        return useShader->rayColor(r, rec, light, *this, depth, bgcolor); // return the ray color on that shader
     } else {
-        return bgcolor;
+        return bgcolor; // else return the bgcolor if no intersect
     }
 }
 
+/// @brief this is the BVH node for the BVH tree
+/// @param objects objects vector 
+/// @param start size for the start of vector
+/// @param end size for the end of vector
 bvhNode::bvhNode(std::vector<std::shared_ptr<Shape>>& objects, size_t start, size_t end)
 {
 
