@@ -13,6 +13,23 @@ cd buildVCPkg/examples/debug
 .\test_diffuseInter.exe -w 1920 -h 1080 -r 4 -k 20 -o "interDiffuse.png"
 ```
 
+# Gold Level Project
+
+in buildVCPkg/examples/debug there are two files for subsurface scattering for my gold level project test_diffuseInterBVHSSS.cpp and test_diffuseInterBVHSSSGlow.cpp the first file creates a scene with a wall ground and two spheres it has one point light the two spheres one is a blinn phong sphere the other is a Subsurface scattered sphere. The second file has 4 spheres and a floor sphere. 3 of the spheres are sub surface scattered spheres of different colors each with a light inside of them. The fourth sphere is a lambertian sphere to showcase the glow of the other spheres. Both files take arguments.
+
+example of code running
+```
+cmake --preset=default
+cd buildVCPkg
+cmake --build . 
+
+cd buildVCPkg/examples/debug
+
+.\test_diffuseInterBVHSSS.cpp -w 1920 -h 1080 -r 50 -k 4 -o "imagefile.png"
+```
+
+to see what parameters it wants run the program with -? to get the types of input parameters. -R is the most important as it is rays per pixel for a decent image the more rays the better for a somewhat decent image I find 200 to be decent and more then that is better but takes longer to render. also the glow file has lots of lights to calculate to don't go crazy with the ray count as it may take awhile to run.
+
 ## Building Using CMake Presets
 
 We have several CMake Build Presets that are outlined in the CMakePresets.json. Some are for building for Release or Debug mode. Running the default setup is just fine too.

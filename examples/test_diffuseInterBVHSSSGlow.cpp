@@ -60,12 +60,12 @@ void interDiffuse(int argc, char *argv[]){
 
     std::vector<std::shared_ptr<Shape>> objects;
     Light mainlight(point3(1.0,0.5,-3), vec3(1,1,1), "pointlight"); // Main Light inside the SSS sphere
-    Light secondLight(point3(5,5,5), vec3(0.1,0.1,0.1), "pointlight"); // secondary light for ambient
-    Light GreenSSSLight(point3(-1.0f, 1.5f, -3.0f), vec3(1,1,1), "pointlight");
-    Light BlueSSSLight(point3(-2.0f, 0.5f, -3.0f), vec3(1,1,1), "pointlight");
+    Light secondLight(point3(5,5,5), vec3(0.2,0.2,0.2), "pointlight"); // secondary light for ambient
+    Light GreenSSSLight(point3(-1.0f, 3.0f, -3.0f), vec3(1,1,1), "pointlight"); // green light in sphere
+    Light BlueSSSLight(point3(-3.0f, 0.5f, -3.0f), vec3(1,1,1), "pointlight"); // blue light in sphere
 
     // Subsurface Scattered sphere 
-    auto SSSSphere = std::make_shared<SubSurfaceShader>(vec3(1.0,0.7,0.6), 5.0f, 0.2f); // parameters are color(albedo), Scattering(sigma_s), Absorption(sigma_a) 
+    auto SSSSphere = std::make_shared<SubSurfaceShader>(vec3(1.0,0.25,0.25), 5.0f, 0.2f); // parameters are color(albedo), Scattering(sigma_s), Absorption(sigma_a) 
     std::shared_ptr<Shape> SubSurfaceSphere = std::make_shared<Sphere>(point3(1.0f, 0.5, -3.0f), 1.0f, SSSSphere); // position of sphere, radius, shader
 
     // Ground lambertian shader for the ground sphere
@@ -80,11 +80,11 @@ void interDiffuse(int argc, char *argv[]){
     auto RedShade = std::make_shared<LambertianShader>(vec3(1.0, 0.2, 0.2)); // red Blinn Phong Shader
     std::shared_ptr<Shape> redSphere = std::make_shared<Sphere>(point3(-1.0f, 0.5, -3.0f), 1.0f, RedShade); // make shared pointer of shape sphere with the red blinn phong shader
 
-    auto SSSBlue = std::make_shared<SubSurfaceShader>(vec3(0.6, 0.7, 1.0), 5.0f, 0.2f);
-    std::shared_ptr<Shape> SubSurfaceBlue = std::make_shared<Sphere>(point3(-2.0f, 0.5f, -3.0f), 1.0f, SSSBlue);
+    auto SSSBlue = std::make_shared<SubSurfaceShader>(vec3(0.25, 0.25, 1.0), 5.0f, 0.2f);
+    std::shared_ptr<Shape> SubSurfaceBlue = std::make_shared<Sphere>(point3(-3.05f, 0.5f, -2.25f), 1.0f, SSSBlue);
 
-    auto SSSGreen = std::make_shared<SubSurfaceShader>(vec3(0.6, 1.0, 0.7), 5.0f, 0.2f);
-    std::shared_ptr<Shape> SubsurfaceGreen = std::make_shared<Sphere>(point3(-1.0f, 1.5f, -3.0f), 1.0f, SSSGreen);
+    auto SSSGreen = std::make_shared<SubSurfaceShader>(vec3(0.25, 1.0, 0.25), 5.0f, 0.2f);
+    std::shared_ptr<Shape> SubsurfaceGreen = std::make_shared<Sphere>(point3(-1.0f, 2.5f, -2.5f), 1.0f, SSSGreen);
 
     /*
      Add objects to the objects shape list
@@ -118,8 +118,8 @@ void interDiffuse(int argc, char *argv[]){
 
                 pixel_color += sceneBVH->computeRayColor(r, tmin, tmax, mainlight, vec3(0,0,0), depth); // compute ray color for main light
                 pixel_color += sceneBVH->computeRayColor(r, tmin, tmax, secondLight, vec3(0,0,0), depth); // compute ray color for second light
-                pixel_color += sceneBVH->computeRayColor(r, tmin, tmax, BlueSSSLight, vec3(0,0,0), depth); // compute ray color for second light
-                pixel_color += sceneBVH->computeRayColor(r, tmin, tmax, GreenSSSLight, vec3(0,0,0), depth); // compute ray color for second light
+                pixel_color += sceneBVH->computeRayColor(r, tmin, tmax, BlueSSSLight, vec3(0,0,0), depth); // compute ray color for blue light light
+                pixel_color += sceneBVH->computeRayColor(r, tmin, tmax, GreenSSSLight, vec3(0,0,0), depth); // compute ray color for green light light
 
             }
 

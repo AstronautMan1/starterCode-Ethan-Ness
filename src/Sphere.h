@@ -37,7 +37,7 @@ class Sphere : public Shape{
 
         void setShader(std::shared_ptr<shader> newShader) {shaderPtr = newShader;}
 
-        BoundingBox boundingBox() const override{
+        BoundingBox boundingBox() const override{ // bounding box for sphere
             vec3 min = center - vec3(radius, radius, radius);
             vec3 max = center + vec3(radius, radius, radius);
             return BoundingBox(min, max);

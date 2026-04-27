@@ -17,9 +17,9 @@
 #include "BlinnPhongShader.h" // blinn phong shader class
 #include "Light.h" // light class
 #include "handleGraphicsArgs.h" // graphics argument handling
-#include "BVH.h"
-#include "SubSurfaceScatteringShader.h"
-#include "EmitterShader.h"
+#include "BVH.h" // BVH Strucutre
+#include "SubSurfaceScatteringShader.h" // sub surface scattering shader
+#include "EmitterShader.h" // emmiter shader
 #include <random> // random library
 
 /// @brief this is the random offset for MSAA anti aliasing
@@ -59,8 +59,7 @@ void interDiffuse(int argc, char *argv[]){
     PerspectiveCamera pc(position, U, V, W, focal, planeWidth, planeHeight, fb.getWidth(), fb.getHeight()); // make a perspective camera
 
     std::vector<std::shared_ptr<Shape>> objects;
-    Light mainlight(point3(1.0,0.5,-3), vec3(1,1,1), "pointlight"); // Main Light inside the SSS sphere
-    Light secondLight(point3(5,5,5), vec3(0.1,0.1,0.1), "pointlight"); // secondary light for ambient
+    Light MainLight(point3(5,5,5), vec3(1,1,1), "pointlight"); // Main light
 
     // Subsurface Scattered sphere 
     auto SSSSphere = std::make_shared<SubSurfaceShader>(vec3(1.0,0.7,0.6), 5.0f, 0.2f); // parameters are color(albedo), Scattering(sigma_s), Absorption(sigma_a) 
@@ -85,7 +84,6 @@ void interDiffuse(int argc, char *argv[]){
     objects.push_back(ground);
     objects.push_back(redSphere);
     objects.push_back(wall);
-    //objects.push_back(lightSphere);
 
     std::shared_ptr<bvhNode> sceneBVH = std::make_shared<bvhNode>(objects, 0, objects.size()); // make a scene bvh with the objects passed in
 
@@ -106,8 +104,7 @@ void interDiffuse(int argc, char *argv[]){
 
                 pc.generateRay(x + u_offset, y + v_offset, r); // generate ray with offsets
 
-                pixel_color += sceneBVH->computeRayColor(r, tmin, tmax, mainlight, vec3(0,0,0), depth); // compute ray color for main light
-                pixel_color += sceneBVH->computeRayColor(r, tmin, tmax, secondLight, vec3(0,0,0), depth); // compute ray color for second light
+                pixel_color += sceneBVH->computeRayColor(r, tmin, tmax, MainLight, vec3(0,0,0), depth); // compute ray color for main light
             }
 
             // Average the accumulated color by the number of samples

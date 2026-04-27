@@ -36,13 +36,19 @@ vec3 bvhNode::computeRayColor(const ray &r, float tmin, float tmax, const Light 
 bvhNode::bvhNode(std::vector<std::shared_ptr<Shape>>& objects, size_t start, size_t end)
 {
 
+    /*
+     comparator between shapes for bounding boxes around those objects
+    */
     int axis = rand() % 3;
     auto comparator = [axis](const std::shared_ptr<Shape>& a, const std::shared_ptr<Shape>& b) {
         return a->boundingBox().min[axis] < b->boundingBox().min[axis];
     };
 
-    size_t objectSpan = end - start;
+    size_t objectSpan = end - start; // span of objects
 
+    /*
+        Depending on objects span we set the children differently
+    */
     if(objectSpan == 1){
         leftChild = rightChild = objects[start];
     }
@@ -67,7 +73,12 @@ bvhNode::bvhNode(std::vector<std::shared_ptr<Shape>>& objects, size_t start, siz
 
 }
 
-
+/// @brief The intersect function that tests wether the hit is on the left or right child
+/// @param r the ray r
+/// @param tmin tmin
+/// @param tmax tmax
+/// @param rec hit record
+/// @return return true on either hit left or hit right or false if no hit on either
 bool bvhNode::intersect(const ray& r, float tmin, float &tmax, hit_record &rec){
     if (!box.hit(r, tmin, tmax)) return false;
 
