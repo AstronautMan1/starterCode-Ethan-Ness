@@ -63,7 +63,7 @@ vec3 SubSurfaceShader::rayColor(const ray &r, const hit_record &rec, const Light
 
         if (scene.intersect(to_light, 0.0001f, dist_to_light, light_rec)) { // if the intersect point of ray to light with a tmin of 0.0001 tmax of dist to light and light record is true
             float dist_inside = light_rec.getT(); // distance inside is the t of light rec
-            float atten = std::exp(-extinction * dist_inside); // atten is the eulers of -extinction * dist_inside)
+            float atten = std::exp(-extinction * dist_inside); // atten is the expon of -extinction * dist_inside)
             vec3 transmission(atten, atten, atten); // transmission is the vec3 of atten
             
             sss_result += light.getIntensity() * throughput * transmission; // result of the SSS is SSS + intenstity * throughput * transmission

@@ -60,7 +60,7 @@ void interDiffuse(int argc, char *argv[]){
 
     std::vector<std::shared_ptr<Shape>> objects;
     Light mainlight(point3(1.0,0.5,-3), vec3(1,1,1), "pointlight"); // Main Light inside the SSS sphere
-    Light secondLight(point3(5,5,5), vec3(0.2,0.2,0.2), "pointlight"); // secondary light for ambient
+    Light secondLight(point3(5,5,5), vec3(0.3,0.3,0.3), "pointlight"); // secondary light for ambient
     Light GreenSSSLight(point3(-1.0f, 3.0f, -3.0f), vec3(1,1,1), "pointlight"); // green light in sphere
     Light BlueSSSLight(point3(-3.0f, 0.5f, -3.0f), vec3(1,1,1), "pointlight"); // blue light in sphere
 
@@ -86,6 +86,9 @@ void interDiffuse(int argc, char *argv[]){
     auto SSSGreen = std::make_shared<SubSurfaceShader>(vec3(0.25, 1.0, 0.25), 5.0f, 0.2f);
     std::shared_ptr<Shape> SubsurfaceGreen = std::make_shared<Sphere>(point3(-1.0f, 2.5f, -2.5f), 1.0f, SSSGreen);
 
+    auto mirrorshade = std::make_shared<MirrorShader>(vec3(1,1,1), 1.0f); // color is white for mirror and 1.0 reflectance for perfect mirror
+    std::shared_ptr<Shape> mirrorsphere = std::make_shared<Sphere>(point3(1.0f, 2.5f, -2.5f), 1.0f, mirrorshade);
+
     /*
      Add objects to the objects shape list
     */
@@ -94,8 +97,8 @@ void interDiffuse(int argc, char *argv[]){
     objects.push_back(redSphere);
     objects.push_back(SubSurfaceBlue);
     objects.push_back(SubsurfaceGreen);
-    //objects.push_back(wall);
-    //objects.push_back(lightSphere);
+    objects.push_back(wall);
+    objects.push_back(mirrorsphere);
 
     std::shared_ptr<bvhNode> sceneBVH = std::make_shared<bvhNode>(objects, 0, objects.size()); // make a scene bvh with the objects passed in
 
